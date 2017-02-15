@@ -1,0 +1,24 @@
+# $uni-circuit-id = abc123
+# $uni-cir-units = 10
+# value = 1
+# $arg1 = 2
+# $network.name = vCE0001.in
+# $network.segment[0].provider-segmentation-id = 1212
+# $network.segment[1].provider-segmentation-id = 1213
+# $availability-zone = mtsnj-esx-az01
+length($uni-circuit-id) > 0
+$uni-cir-units * 1000 * 100 / 100
+$uni-cir-units / 1000
+$uni-cir-units - 100
+$uni-cir-units + 100
+(value * 3 - $arg1 > 0) and (length($uni-circuit-id) == 0)
+'pg-'+$network.name
+$network.segment[0].provider-segmentation-id
+toUpperCase($network.name)
+toLowerCase($network.name)
+toUpperCase(substr($availability-zone, 0, 5))
+convertBase(1234, 10)
+convertBase(10, 16, 10)
+convertBase(ZZ, 36, 10)
+convertBase(10, 10, 36)
+(0 - 1) * $arg1

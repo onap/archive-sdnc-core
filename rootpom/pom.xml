@@ -1,0 +1,723 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <parent>
+    <groupId>org.opendaylight.odlparent</groupId>
+    <artifactId>odlparent</artifactId>
+    <version>1.6.2-Beryllium-SR2</version>
+    <relativePath>../../../../../opendaylight/odlparent</relativePath>
+  </parent>
+
+  <profiles>
+    <profile>
+      <id>local-build</id>
+      <activation>
+        <property>
+          <name>internal</name>
+          <value>!false</value>
+        </property>
+      </activation>
+      <properties>
+        <ssl.allowall>true</ssl.allowall>
+        <ssl.insecure>true</ssl.insecure>
+        <openecomp.nexus.host>162.242.254.138</openecomp.nexus.host>
+	<openecomp.nexus.port>8443</openecomp.nexus.port>
+        <openecomp.nexus.release-url>https://${openecomp.nexus.host}:8443/repository/maven-releases/</openecomp.nexus.release-url>
+        <openecomp.nexus.snapshot-url>https://${openecomp.nexus.host}:8443/repository/maven-snapshots/</openecomp.nexus.snapshot-url>
+        <openecomp.git.host>codecloud.web.att.com</openecomp.git.host>
+        <openecomp.git.port>7999</openecomp.git.port>
+        <openecomp.git.project>st_osecomp</openecomp.git.project>
+        <openecomp.git.protocol>http</openecomp.git.protocol>
+      </properties>
+    </profile>
+    <profile>
+      <id>external-build</id>
+      <activation>
+        <property>
+          <name>internal</name>
+          <value>false</value>
+        </property>
+      </activation>
+      <properties>
+        <ssl.allowall>false</ssl.allowall>
+        <ssl.insecure>false</ssl.insecure>
+        <openecomp.nexus.host>ecomp-nexus</openecomp.nexus.host>
+	<openecomp.nexus.port>8443</openecomp.nexus.port>
+        <openecomp.nexus.release-url>https://${openecomp.nexus.host}:8443/repository/maven-releases/</openecomp.nexus.release-url>
+        <openecomp.nexus.snapshot-url>https://${openecomp.nexus.host}:8443/repository/maven-snapshots/</openecomp.nexus.snapshot-url>
+        <openecomp.git.host>10.208.194.49</openecomp.git.host>
+        <openecomp.git.port>443</openecomp.git.port>
+        <openecomp.git.project>openecomp</openecomp.git.project>
+        <openecomp.git.protocol>https</openecomp.git.protocol>
+      </properties>
+    </profile>
+
+  </profiles>
+
+  <properties>
+    <release-tag>R17.01</release-tag>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <bundle.plugin.version>2.5.0</bundle.plugin.version>
+    <java.version.source>1.7</java.version.source>
+    <java.version.target>1.7</java.version.target>
+    <maven.compile.plugin.version>2.5.1</maven.compile.plugin.version>
+    <equinox.osgi.version>3.8.1.v20120830-144521</equinox.osgi.version>
+    <jackson-annotations-version>${jackson.version}</jackson-annotations-version>
+    <jettison.version>1.3.7</jettison.version>
+    <jvnet.jaxb2.version>0.6.4</jvnet.jaxb2.version>
+    <apache.httpcomponents.version>4.4</apache.httpcomponents.version>
+    <antlr.version>4.5.1</antlr.version>
+    <mysql.connector.version>5.1.39</mysql.connector.version>
+    <odl.version>1.6.2-Beryllium-SR2</odl.version>
+    <odl.dlux.version>0.3.2-Beryllium-SR2</odl.dlux.version>
+    <odl.yangtools.version>0.8.2-Beryllium-SR2</odl.yangtools.version>
+    <odl.mdsal.version>1.3.2-Beryllium-SR2</odl.mdsal.version>
+    <odl.mdsal.features.version>2.0.2-Beryllium-SR2</odl.mdsal.features.version>
+    <odl.mdsal.model.version>0.8.2-Beryllium-SR2</odl.mdsal.model.version>
+    <odl.restconf.version>1.3.2-Beryllium-SR2</odl.restconf.version>
+    <odl.yangtools.version>0.8.2-Beryllium-SR2</odl.yangtools.version>
+    <odl.controller.model.version>${odl.mdsal.model.version}</odl.controller.model.version>
+    <odl.controller.config.api.version>0.4.2-Beryllium-SR2</odl.controller.config.api.version>
+    <odl.karaf.empty.distro.version>${odl.version}</odl.karaf.empty.distro.version>
+    <odl.commons.opendaylight.version>${odl.version}</odl.commons.opendaylight.version>
+    <odl.ietf-inet-types.version>2010.09.24.8.2-Beryllium-SR2</odl.ietf-inet-types.version>
+    <odl.ietf-yang-types.version>2010.09.24.8.2-Beryllium-SR2</odl.ietf-yang-types.version>
+    <odl.yang.jmx.generator.version>0.4.2-Beryllium-SR2</odl.yang.jmx.generator.version>
+    <odl.yangtools.yang.maven.plugin.version>${odl.yangtools.version}</odl.yangtools.yang.maven.plugin.version>
+    <features.file>features.xml</features.file>
+    <h2database.version>1.4.186</h2database.version>
+    <jmxGeneratorPath>src/main/yang-gen-config</jmxGeneratorPath>
+    <salGeneratorPath>src/main/yang-gen-sal</salGeneratorPath>
+    <checkstyle.skip>true</checkstyle.skip>
+
+    <sonar.language>java</sonar.language>
+    <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+    <sonar.surefire.reportsPath>${project.build.directory}/surefire-reports</sonar.surefire.reportsPath>
+    <sonar.jacoco.reportPath>${project.build.directory}/coverage-reports/jacoco.exec</sonar.jacoco.reportPath>
+    <sonar.jacoco.reportMissing.force.zero>true</sonar.jacoco.reportMissing.force.zero>
+    <sonar.projectVersion>${project.version}</sonar.projectVersion>
+
+    <sdnc.core.version>1.0.0</sdnc.core.version>
+    <sdnc.adaptors.version>1.0.0</sdnc.adaptors.version>
+    <sdnctl.sli.version>${sdnc.core.version}</sdnctl.sli.version>
+    <sdnctl.aai.service.version>${sdnc.adaptors.version}</sdnctl.aai.service.version>
+    <sdnctl.dblib.version>${sdnc.core.version}</sdnctl.dblib.version>
+    <sdnctl.mdsal.resource.version>${sdnc.adaptors.version}</sdnctl.mdsal.resource.version>
+    <sdnctl.slipluginutils.version>${sdnc.core.version}</sdnctl.slipluginutils.version>
+  </properties>
+
+  <modelVersion>4.0.0</modelVersion>
+  <packaging>pom</packaging>
+  <groupId>org.openecomp.sdnc.core</groupId>
+  <artifactId>root</artifactId>
+  <version>1.0.0</version>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.opendaylight.controller</groupId>
+        <artifactId>opendaylight-karaf-empty</artifactId>
+        <version>${odl.karaf.empty.distro.version}</version>
+        <type>zip</type>
+      </dependency>
+
+
+      <dependency>
+        <groupId>org.openecomp.sdnc.core</groupId>
+        <artifactId>sli-common</artifactId>
+        <version>${sdnctl.sli.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.openecomp.sdnc.core</groupId>
+        <artifactId>sli-provider</artifactId>
+        <version>${sdnctl.sli.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.openecomp.sdnc.core</groupId>
+        <artifactId>aai-service-provider</artifactId>
+        <version>${sdnctl.aai.service.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.openecomp.sdnc.core</groupId>
+        <artifactId>dblib-provider</artifactId>
+        <version>${sdnctl.dblib.version}</version>
+      </dependency>
+    </dependencies>
+
+  </dependencyManagement>
+
+
+  <name>SDNC Root</name>
+  <url>http://wiki.openecomp.org</url>
+  <description>Root POM to be used for all SDNC projects</description>
+
+
+  <issueManagement>
+    <system>JIRA</system>
+    <url>https://jira.openecomp.org/</url>
+  </issueManagement>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.10.4</version>
+        <configuration>
+          <failOnError>false</failOnError>
+          <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet>
+          <docletArtifact>
+            <groupId>org.umlgraph</groupId>
+            <artifactId>umlgraph</artifactId>
+            <version>5.6</version>
+          </docletArtifact>
+          <additionalparam>-views</additionalparam>
+          <useStandardDocletOptions>true</useStandardDocletOptions>
+	  <excludePackageNames>org.opendaylight.*</excludePackageNames>
+          <additionalDependencies>
+	    <additionalDependency>
+	      <groupId>org.opendaylight.odlparent</groupId>
+              <artifactId>odlparent</artifactId>
+              <version>1.6.2-Beryllium-SR2</version>
+            </additionalDependency>
+            <additionalDependency>
+              <groupId>org.slf4j</groupId>
+              <artifactId>slf4j-api</artifactId>
+              <version>${slf4j.version}</version>
+            </additionalDependency>
+            <additionalDependency>
+              <groupId>org.antlr</groupId>
+              <artifactId>antlr4</artifactId>
+              <version>${antlr.version}</version>
+            </additionalDependency>
+            <additionalDependency>
+              <groupId>org.antlr</groupId>
+              <artifactId>antlr4-runtime</artifactId>
+              <version>${antlr.version}</version>
+            </additionalDependency>
+
+            <additionalDependency>
+              <groupId>com.sun.jersey</groupId>
+              <artifactId>jersey-client</artifactId>
+              <version>${jersey.json.version}</version>
+            </additionalDependency>
+            <additionalDependency>
+              <groupId>com.sun.jersey</groupId>
+              <artifactId>jersey-core</artifactId>
+              <version>${jersey.json.version}</version>
+            </additionalDependency>
+            <additionalDependency>
+              <groupId>org.apache.httpcomponents</groupId>
+              <artifactId>httpcore-osgi</artifactId>
+              <version>${apache.httpcomponents.version}</version>
+            </additionalDependency>
+            <additionalDependency>
+              <groupId>org.apache.httpcomponents</groupId>
+              <artifactId>httpclient-osgi</artifactId>
+              <version>${apache.httpcomponents.version}</version>
+            </additionalDependency>
+            <additionalDependency>
+              <groupId>com.fasterxml.jackson.core</groupId>
+              <artifactId>jackson-databind</artifactId>
+              <version>${fasterxml.jackson.version}</version>
+            </additionalDependency>
+            <additionalDependency>
+              <groupId>com.fasterxml.jackson.core</groupId>
+              <artifactId>jackson-annotations</artifactId>
+              <version>${fasterxml.jackson.version}</version>
+            </additionalDependency>
+            <additionalDependency>
+              <groupId>com.fasterxml.jackson.core</groupId>
+              <artifactId>jackson-core</artifactId>
+              <version>${fasterxml.jackson.version}</version>
+            </additionalDependency>
+            <additionalDependency>
+              <groupId>commons-lang</groupId>
+              <artifactId>commons-lang</artifactId>
+              <version>${commons.lang.version}</version>
+            </additionalDependency>
+            <additionalDependency>
+              <groupId>org.opendaylight.mdsal</groupId>
+              <artifactId>yang-binding</artifactId>
+              <version>${odl.yangtools.version}</version>
+            </additionalDependency>
+            <additionalDependency>
+              <groupId>org.opendaylight.yangtools</groupId>
+              <artifactId>yang-common</artifactId>
+              <version>${odl.yangtools.version}</version>
+            </additionalDependency>
+            <additionalDependency>
+              <groupId>org.opendaylight.mdsal.model</groupId>
+              <artifactId>ietf-inet-types</artifactId>
+              <version>${odl.ietf-inet-types.version}</version>
+            </additionalDependency>
+            <additionalDependency>
+              <groupId>org.opendaylight.mdsal.model</groupId>
+              <artifactId>ietf-yang-types</artifactId>
+              <version>${odl.ietf-yang-types.version}</version>
+            </additionalDependency>
+          </additionalDependencies>
+        </configuration>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>javadoc-no-fork</report>
+              <report>test-javadoc-no-fork</report>
+            </reports>
+          </reportSet>
+          <reportSet>
+            <id>aggregate</id>
+            <reports>
+              <report>aggregate</report>
+              <report>test-aggregate</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jxr-plugin</artifactId>
+        <version>2.3</version>
+        <reportSets>
+          <reportSet>
+            <id>aggregate</id>
+            <reports>
+              <report>aggregate</report>
+              <report>test-aggregate</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.17</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-changelog-plugin</artifactId>
+        <version>2.3</version>
+        <reportSets>
+          <reportSet>
+            <id>dual-report</id>
+            <configuration>
+              <type>range</type>
+              <range>30</range>
+            </configuration>
+            <reports>
+              <report>changelog</report>
+              <report>file-activity</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>taglist-maven-plugin</artifactId>
+        <version>2.4</version>
+      </plugin>
+    </plugins>
+  </reporting>
+
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>openecomp-public</id>
+      <url>http://${openecomp.nexus.host}:8443/repository/maven-public</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </pluginRepository>
+    <pluginRepository>
+      <id>opendaylight-mirror</id>
+      <name>opendaylight-mirror</name>
+      <url>https://nexus.opendaylight.org/content/repositories/public/</url>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+    <pluginRepository>
+      <id>opendaylight-snapshot</id>
+      <name>opendaylight-snapshot</name>
+      <url>https://nexus.opendaylight.org/content/repositories/opendaylight.snapshot/</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </pluginRepository>
+<!-- Black Duck plugin dependencies -->
+    <pluginRepository>
+      <id>JCenter</id>
+      <name>JCenter Repository</name>
+      <url>http://jcenter.bintray.com</url>
+    </pluginRepository>
+
+    <pluginRepository>
+      <id>Restlet</id>
+      <name>Restlet Repository</name>
+      <url>http://maven.restlet.com</url>
+    </pluginRepository>
+  </pluginRepositories>
+
+
+  <repositories>
+    <repository>
+      <id>openecomp-public</id>
+      <url>https://${openecomp.nexus.host}:8443/repository/maven-public</url>
+      <releases>
+        <enabled>true</enabled>
+				<!-- <updatePolicy>always</updatePolicy> <updatePolicy>never</updatePolicy>
+					<updatePolicy>daily</updatePolicy> <updatePolicy>interval:in minutes</updatePolicy> -->
+        <updatePolicy>never</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+				<!-- <updatePolicy>always</updatePolicy> <updatePolicy>never</updatePolicy>
+					<updatePolicy>daily</updatePolicy> <updatePolicy>interval:30</updatePolicy> -->
+      </snapshots>
+    </repository>
+    <repository>
+      <id>openecomp-release</id>
+      <name>openecomp-repository-releases</name>
+      <url>${openecomp.nexus.release-url}</url>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>openecomp-snapshot</id>
+      <name>openecomp-repository-snapshots</name>
+      <url>${openecomp.nexus.snapshot-url}</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>opendaylight-mirror</id>
+      <name>opendaylight-mirror</name>
+      <url>https://nexus.opendaylight.org/content/repositories/public/</url>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>opendaylight-snapshot</id>
+      <name>opendaylight-snapshot</name>
+      <url>https://nexus.opendaylight.org/content/repositories/opendaylight.snapshot/</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+
+  </repositories>
+
+  <distributionManagement>
+    <site>
+      <id>sdnc-javadoc</id>
+      <url>dav:https://ecomp-nexus:${openecomp.nexus.port}/repository/sdn-c-javadoc/${project.version}</url>
+    </site>
+    <repository>
+      <id>nexus</id>
+      <name>openecomp-repository-releases</name>
+      <url>${openecomp.nexus.release-url}</url>
+    </repository>
+    <snapshotRepository>
+      <id>nexus</id>
+      <name>openecomp-repository-snapshots</name>
+      <url>${openecomp.nexus.snapshot-url}</url>
+    </snapshotRepository>
+  </distributionManagement>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>3.6</version>
+          <dependencies>
+            <dependency><!-- add support for ssh/scp -->
+              <groupId>org.apache.maven.wagon</groupId>
+              <artifactId>wagon-ssh</artifactId>
+              <version>1.0</version>
+            </dependency>
+            <dependency>
+              <groupId>org.apache.maven.wagon</groupId>
+              <artifactId>wagon-webdav-jackrabbit</artifactId>
+              <version>2.10</version>
+            </dependency>
+          </dependencies>
+          <executions>
+            <execution>
+              <id>attach-descriptor</id>
+              <goals>
+                <goal>attach-descriptor</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>${maven.compile.plugin.version}</version>
+          <configuration>
+            <source>${java.version.source}</source>
+            <target>${java.version.target}</target>
+          </configuration>
+        </plugin>
+	<plugin>
+	 <groupId>org.codehaus.mojo</groupId>
+	 <artifactId>sonar-maven-plugin</artifactId>
+	 <version>3.2</version>
+	 </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>2.10</version>
+          <configuration>
+            <additionalDependencies>
+              <additionalDependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+              </additionalDependency>
+              <additionalDependency>
+                <groupId>org.antlr</groupId>
+                <artifactId>antlr4</artifactId>
+                <version>${antlr.version}</version>
+              </additionalDependency>
+              <additionalDependency>
+                <groupId>org.antlr</groupId>
+                <artifactId>antlr4-runtime</artifactId>
+                <version>${antlr.version}</version>
+              </additionalDependency>
+
+              <additionalDependency>
+                <groupId>com.sun.jersey</groupId>
+                <artifactId>jersey-client</artifactId>
+                <version>${jersey.client.version}</version>
+              </additionalDependency>
+              <additionalDependency>
+                <groupId>com.sun.jersey</groupId>
+                <artifactId>jersey-core</artifactId>
+                <version>${jersey.version}</version>
+              </additionalDependency>
+              <additionalDependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpcore-osgi</artifactId>
+                <version>${apache.httpcomponents.version}</version>
+              </additionalDependency>
+              <additionalDependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient-osgi</artifactId>
+                <version>${apache.httpcomponents.version}</version>
+              </additionalDependency>
+              <additionalDependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+              </additionalDependency>
+              <additionalDependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson.version}</version>
+              </additionalDependency>
+              <additionalDependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${jackson.version}</version>
+              </additionalDependency>
+              <additionalDependency>
+                <groupId>commons-lang</groupId>
+                <artifactId>commons-lang</artifactId>
+                <version>${commons.lang.version}</version>
+              </additionalDependency>
+              <additionalDependency>
+                <groupId>org.opendaylight.mdsal</groupId>
+			<artifactId>yang-binding</artifactId>
+			<version>${odl.yangtools.version}</version>
+              </additionalDependency>
+              <additionalDependency>
+                <groupId>org.opendaylight.yangtools</groupId>
+                <artifactId>yang-common</artifactId>
+                <version>${odl.yangtools.version}</version>
+              </additionalDependency>
+              <additionalDependency>
+                <groupId>org.opendaylight.mdsal.model</groupId>
+                <artifactId>ietf-inet-types</artifactId>
+                <version>${odl.ietf-inet-types.version}</version>
+              </additionalDependency>
+              <additionalDependency>
+                <groupId>org.opendaylight.mdsal.model</groupId>
+                <artifactId>ietf-yang-types</artifactId>
+                <version>${odl.ietf-yang-types.version}</version>
+              </additionalDependency>
+            </additionalDependencies>
+          </configuration>
+
+          <executions>
+            <execution>
+              <id>aggregate</id>
+              <goals>
+                <goal>aggregate</goal>
+              </goals>
+              <phase>site</phase>
+
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>2.1.1</version>
+          <executions>
+            <execution>
+              <id>bundle-sources</id>
+              <phase>package</phase>
+              <goals>
+								<!-- produce source artifact for main project sources -->
+                <goal>jar-no-fork</goal>
+
+								<!-- produce source artifact for project test sources -->
+                <goal>test-jar-no-fork</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+
+      </plugins>
+
+    </pluginManagement>
+
+    <plugins>
+			<!-- license plugin -->
+
+      <plugin>
+
+        <groupId>org.codehaus.mojo</groupId>
+
+        <artifactId>license-maven-plugin</artifactId>
+
+        <version>1.10</version>
+
+        <configuration>
+
+          <addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
+
+          <processStartTag>============LICENSE_START=======================================================</processStartTag>
+
+          <processEndTag>============LICENSE_END=========================================================</processEndTag>
+
+          <sectionDelimiter>================================================================================</sectionDelimiter>
+
+          <licenseName>apache_v2</licenseName>
+
+          <inceptionYear>2017</inceptionYear>
+
+          <organizationName>AT&amp;T Intellectual Property. All rights
+            reserved.</organizationName>
+
+          <projectName>openECOMP : SDN-C</projectName>
+
+          <canUpdateCopyright>true</canUpdateCopyright>
+
+          <canUpdateDescription>true</canUpdateDescription>
+
+          <canUpdateLicense>true</canUpdateLicense>
+
+          <emptyLineAfterHeader>true</emptyLineAfterHeader>
+          <excludes>
+            <exclude>**/*.png</exclude>
+            <exclude>**/*.json</exclude>
+          </excludes>
+
+        </configuration>
+
+        <executions>
+
+          <execution>
+
+            <id>first</id>
+
+            <goals>
+
+              <goal>update-file-header</goal>
+
+            </goals>
+
+            <phase>process-sources</phase>
+
+          </execution>
+
+        </executions>
+
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>properties-maven-plugin</artifactId>
+        <version>1.0.0</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>set-system-properties</goal>
+            </goals>
+            <configuration>
+              <properties>
+                <property>
+                  <name>maven.wagon.http.ssl.allowall</name>
+                  <value>${ssl.allowall}</value>
+                </property>
+                <property>
+                  <name>maven.wagon.http.ssl.insecure</name>
+                  <value>${ssl.insecure}</value>
+                </property>
+              </properties>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>versions-maven-plugin</artifactId>
+        <version>2.3</version>
+      </plugin>
+      <plugin>
+        <artifactId>maven-scm-plugin</artifactId>
+        <version>1.8.1</version>
+        <configuration>
+          <tag>${project.artifactId}-${project.version}</tag>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <organization>
+    <name>OpenECOMP</name>
+  </organization>
+</project>
