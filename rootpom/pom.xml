@@ -9,51 +9,20 @@
     <relativePath>../../../../../opendaylight/odlparent</relativePath>
   </parent>
 
-  <profiles>
-    <profile>
-      <id>local-build</id>
-      <activation>
-        <property>
-          <name>internal</name>
-          <value>!false</value>
-        </property>
-      </activation>
-      <properties>
-        <ssl.allowall>true</ssl.allowall>
-        <ssl.insecure>true</ssl.insecure>
-        <openecomp.nexus.host>162.242.254.138</openecomp.nexus.host>
-	<openecomp.nexus.port>8443</openecomp.nexus.port>
-        <openecomp.nexus.release-url>https://${openecomp.nexus.host}:8443/repository/maven-releases/</openecomp.nexus.release-url>
-        <openecomp.nexus.snapshot-url>https://${openecomp.nexus.host}:8443/repository/maven-snapshots/</openecomp.nexus.snapshot-url>
-        <openecomp.git.host>codecloud.web.att.com</openecomp.git.host>
-        <openecomp.git.port>7999</openecomp.git.port>
-        <openecomp.git.project>st_osecomp</openecomp.git.project>
-        <openecomp.git.protocol>http</openecomp.git.protocol>
-      </properties>
-    </profile>
-    <profile>
-      <id>external-build</id>
-      <activation>
-        <property>
-          <name>internal</name>
-          <value>false</value>
-        </property>
-      </activation>
-      <properties>
-        <ssl.allowall>false</ssl.allowall>
-        <ssl.insecure>false</ssl.insecure>
-        <openecomp.nexus.host>ecomp-nexus</openecomp.nexus.host>
-	<openecomp.nexus.port>8443</openecomp.nexus.port>
-        <openecomp.nexus.release-url>https://${openecomp.nexus.host}:8443/repository/maven-releases/</openecomp.nexus.release-url>
-        <openecomp.nexus.snapshot-url>https://${openecomp.nexus.host}:8443/repository/maven-snapshots/</openecomp.nexus.snapshot-url>
-        <openecomp.git.host>10.208.194.49</openecomp.git.host>
-        <openecomp.git.port>443</openecomp.git.port>
-        <openecomp.git.project>openecomp</openecomp.git.project>
-        <openecomp.git.protocol>https</openecomp.git.protocol>
-      </properties>
-    </profile>
+ <!--
+   The following properties should be defined in your settings.xml file
 
-  </profiles>
+        <ssl.allowall>{Disable host name verification: true,false}</ssl.allowall>
+        <ssl.insecure>{Disable host name verification: true,false}</ssl.insecure>
+        <openecomp.nexus.host>{FQDN or IP address of nexus}</openecomp.nexus.host>
+	<openecomp.nexus.port>{port}</openecomp.nexus.port>
+        <openecomp.nexus.release-url>{URL for released artifacts}</openecomp.nexus.release-url>
+        <openecomp.nexus.snapshot-url>{URL for snapshot artifacts}</openecomp.nexus.snapshot-url>
+        <openecomp.git.host>{FQDN for OpenECOMP git/gerrit}</openecomp.git.host>
+        <openecomp.git.port>{port for OpenECOMP git/gerrit}</openecomp.git.port>
+        <openecomp.git.project>{git project}</openecomp.git.project>
+        <openecomp.git.protocol>{protocol to git server : ssh, http, https}</openecomp.git.protocol>
+-->
 
   <properties>
     <release-tag>R17.01</release-tag>
