@@ -25,6 +25,16 @@
 -->
 
   <properties>
+    
+        <openecomp.nexus.host>nexus.openecomp.org</openecomp.nexus.host>
+	<openecomp.nexus.port>443</openecomp.nexus.port>
+        <openecomp.nexus.release-url>https://nexus.openecomp.org/content/repositories/releases/</openecomp.nexus.release-url>
+        <openecomp.nexus.snapshot-url>https://nexus.openecomp.org/content/repositories/snapshots/</openecomp.nexus.snapshot-url>
+        <openecomp.git.host>gerrit.openecomp.org</openecomp.git.host>
+        <openecomp.git.port>443</openecomp.git.port>
+        <openecomp.git.project>sdnc</openecomp.git.project>
+        <openecomp.git.protocol>https</openecomp.git.protocol>
+
     <release-tag>R17.01</release-tag>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <bundle.plugin.version>2.5.0</bundle.plugin.version>
