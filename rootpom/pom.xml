@@ -305,7 +305,7 @@
   <pluginRepositories>
     <pluginRepository>
       <id>openecomp-public</id>
-      <url>http://${openecomp.nexus.host}:8443/repository/maven-public</url>
+      <url>https://nexus.openecomp.org/content/groups/public/</url>
       <releases>
         <enabled>true</enabled>
       </releases>
@@ -354,7 +354,7 @@
   <repositories>
     <repository>
       <id>openecomp-public</id>
-      <url>https://${openecomp.nexus.host}:8443/repository/maven-public</url>
+      <url>https://nexus.openecomp.org/content/groups/public/</url>
       <releases>
         <enabled>true</enabled>
 				<!-- <updatePolicy>always</updatePolicy> <updatePolicy>never</updatePolicy>
