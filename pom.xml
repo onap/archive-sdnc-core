@@ -1,159 +1,153 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-    <modelVersion>4.0.0</modelVersion>
-    <packaging>pom</packaging>
-    <groupId>org.openecomp.sdnc.core</groupId>
-    <artifactId>sdnc-core</artifactId>
-
-
-    <name>SDN-C Core Components</name>
-    <url>https://wiki.openecomp.org</url>
-    <description>The SDN-C core components contains the SLI, dblib and root pom</description>
-
-    <parent>
-        <groupId>org.openecomp.sdnc.core</groupId>
-        <artifactId>root</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-            <relativePath>rootpom/pom.xml</relativePath>
-    </parent>
+	<modelVersion>4.0.0</modelVersion>
+	<packaging>pom</packaging>
+	<groupId>org.openecomp.sdnc.core</groupId>
+	<artifactId>sdnc-core</artifactId>
 
 
+	<name>SDN-C Core Components</name>
+	<url>https://wiki.openecomp.org</url>
+	<description>The SDN-C core components contains the SLI, dblib and root pom</description>
 
-    <issueManagement>
-        <system>JIRA</system>
-        <url>http://jira.openecomp.org/</url>
-    </issueManagement>
-
-
-    <scm>
-        <connection>scm:git:ssh://git@${openecomp.git.host}/sdnc-code.git</connection>
-        <developerConnection>scm:git:ssh://${openecomp.git.host}:${openecomp.git.port}/${openecomp.git.project}/sdnc-core.git</developerConnection>
-        <url>${openecomp.git.protocol}://${openecomp.git.host}/projects/${openecomp.git.project}/repos/sdnc-core/browse</url>
-    <tag>HEAD</tag>
-  </scm>
-
-    <ciManagement>
-        <system>Jenkins</system>
-        <url>>https://jenkins.openecomp.org/</url>
-    </ciManagement>
+	<parent>
+		<groupId>org.openecomp.sdnc.core</groupId>
+		<artifactId>root</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+		<relativePath>rootpom/pom.xml</relativePath>
+	</parent>
 
 
-    <distributionManagement>
-        <site>
-          <id>sdnc-javadoc</id>
-          <url>dav:https://${openecomp.nexus.host}:${openecomp.nexus.port}/repository/sdn-c-javadoc/${project.artifactId}/${project.version}</url>
-        </site>
-    </distributionManagement>
 
-    <build>
-        <plugins>
-            <!-- license plugin -->
+	<issueManagement>
+		<system>JIRA</system>
+		<url>http://jira.openecomp.org/</url>
+	</issueManagement>
 
-            <plugin>
 
-                <groupId>org.codehaus.mojo</groupId>
+	<scm>
+		<connection>scm:git:ssh://git@${openecomp.git.host}/sdnc-code.git</connection>
+		<developerConnection>scm:git:ssh://${openecomp.git.host}:${openecomp.git.port}/${openecomp.git.project}/sdnc-core.git</developerConnection>
+		<url>${openecomp.git.protocol}://${openecomp.git.host}/projects/${openecomp.git.project}/repos/sdnc-core/browse</url>
+		<tag>HEAD</tag>
+	</scm>
 
-                <artifactId>license-maven-plugin</artifactId>
+	<ciManagement>
+		<system>Jenkins</system>
+		<url>>https://jenkins.openecomp.org/</url>
+	</ciManagement>
 
-                <version>1.10</version>
 
-                <configuration>
+	<distributionManagement>
+		<site>
+			<id>sdnc-javadoc</id>
+			<url>dav:https://${openecomp.nexus.host}:${openecomp.nexus.port}/repository/sdn-c-javadoc/${project.artifactId}/${project.version}</url>
+		</site>
+	</distributionManagement>
 
-                    <addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
+	<build>
+		<plugins>
+			<!-- license plugin -->
 
-                    <processStartTag>============LICENSE_START=======================================================</processStartTag>
+			<plugin>
 
-                    <processEndTag>============LICENSE_END=========================================================</processEndTag>
+				<groupId>org.codehaus.mojo</groupId>
 
-                    <sectionDelimiter>================================================================================</sectionDelimiter>
+				<artifactId>license-maven-plugin</artifactId>
 
-                    <licenseName>apache_v2</licenseName>
+				<version>1.10</version>
 
-                    <inceptionYear>2017</inceptionYear>
+				<configuration>
 
-                    <organizationName>AT&amp;T Intellectual Property. All rights
-                        reserved.</organizationName>
+					<addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
 
-                    <projectName>openECOMP : SDN-C</projectName>
+					<processStartTag>============LICENSE_START=======================================================</processStartTag>
 
-                    <canUpdateCopyright>true</canUpdateCopyright>
+					<processEndTag>============LICENSE_END=========================================================</processEndTag>
 
-                    <canUpdateDescription>true</canUpdateDescription>
+					<sectionDelimiter>================================================================================</sectionDelimiter>
 
-                    <canUpdateLicense>true</canUpdateLicense>
+					<licenseName>apache_v2</licenseName>
 
-                    <emptyLineAfterHeader>true</emptyLineAfterHeader>
+					<inceptionYear>2017</inceptionYear>
 
-                </configuration>
+					<organizationName>AT&amp;T Intellectual Property. All rights
+						reserved.</organizationName>
 
-                <executions>
+					<projectName>openECOMP : SDN-C</projectName>
 
-                    <execution>
+					<canUpdateCopyright>true</canUpdateCopyright>
 
-                        <id>first</id>
+					<canUpdateDescription>true</canUpdateDescription>
 
-                        <goals>
+					<canUpdateLicense>true</canUpdateLicense>
 
-                            <goal>update-file-header</goal>
+					<emptyLineAfterHeader>true</emptyLineAfterHeader>
 
-                        </goals>
+				</configuration>
 
-                        <phase>process-sources</phase>
+				<executions>
 
-                    </execution>
+					<execution>
 
-                </executions>
+						<id>first</id>
 
-            </plugin>
-            <!-- Blackduck plugin breaks release build
-            <plugin>
-                <groupId>com.blackducksoftware.integration</groupId>
-                <artifactId>hub-maven-plugin</artifactId>
-                <version>1.4.0</version>
-                <inherited>false</inherited>
-                <configuration>
-                    <hubProjectName>${project.name}</hubProjectName>
-                    <outputDirectory>${project.basedir}</outputDirectory>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>create-bdio-file</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>createHubOutput</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            -->
-	   <plugin>
-             <groupId>org.sonatype.plugins</groupId>
-	     <artifactId>nexus-staging-maven-plugin</artifactId>
-             <version>1.6.7</version>
-             <extensions>true</extensions>
-             <configuration>
-                <nexusUrl>https://nexus.openecomp.org</nexusUrl>
-		<stagingProfileId>176c31dfe190a</stagingProfileId>
-		<serverId>ecomp-staging</serverId>
-	     </configuration>
-           </plugin>
-                
-        </plugins>
+						<goals>
 
-    </build>
-    <modules>
-        <module>rootpom</module>
-        <module>dblib</module>
-        <module>filters</module>
-        <module>sli</module>
-        <module>sliPluginUtils</module>
-        <module>sliapi</module>
-    </modules>
-    <organization>
-        <name>AT&amp;T</name>
-    </organization>
-    <version>1.0.0-SNAPSHOT</version>
+							<goal>update-file-header</goal>
+
+						</goals>
+
+						<phase>process-sources</phase>
+
+					</execution>
+
+				</executions>
+
+			</plugin>
+			<!-- Blackduck plugin breaks release build <plugin> <groupId>com.blackducksoftware.integration</groupId>
+				<artifactId>hub-maven-plugin</artifactId> <version>1.4.0</version> <inherited>false</inherited>
+				<configuration> <hubProjectName>${project.name}</hubProjectName> <outputDirectory>${project.basedir}</outputDirectory>
+				</configuration> <executions> <execution> <id>create-bdio-file</id> <phase>package</phase>
+				<goals> <goal>createHubOutput</goal> </goals> </execution> </executions>
+				</plugin> -->
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.6.7</version>
+				<extensions>true</extensions>
+				<configuration>
+					<nexusUrl>https://nexus.openecomp.org</nexusUrl>
+					<stagingProfileId>176c31dfe190a</stagingProfileId>
+					<serverId>ecomp-staging</serverId>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.17</version>
+				<configuration>
+					<skipTests>true</skipTests>
+				</configuration>
+			</plugin>
+
+		</plugins>
+
+	</build>
+	<modules>
+		<module>rootpom</module>
+		<module>dblib</module>
+		<module>filters</module>
+		<module>sli</module>
+		<module>sliPluginUtils</module>
+		<module>sliapi</module>
+	</modules>
+	<organization>
+		<name>AT&amp;T</name>
+	</organization>
+	<version>1.0.0-SNAPSHOT</version>
 
 
 </project>
