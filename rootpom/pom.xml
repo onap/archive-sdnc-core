@@ -414,12 +414,12 @@
 			<url>dav:https://ecomp-nexus:${openecomp.nexus.port}/repository/sdn-c-javadoc/${project.version}</url>
 		</site>
 		<repository>
-			<id>nexus</id>
+			<id>ecomp-releases</id>
 			<name>openecomp-repository-releases</name>
 			<url>${openecomp.nexus.release-url}</url>
 		</repository>
 		<snapshotRepository>
-			<id>nexus</id>
+			<id>ecomp-snapshots</id>
 			<name>openecomp-repository-snapshots</name>
 			<url>${openecomp.nexus.snapshot-url}</url>
 		</snapshotRepository>
