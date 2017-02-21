@@ -86,10 +86,9 @@
 		</profile>
 		<profile>
 			<id>staging</id>
+ 
 			<activation>
-				<property>
-					<name>!no-staging</name>
-				</property>
+				<activeByDefault>true</activeByDefault>
 			</activation>
 			<build>
 				<pluginManagement>
