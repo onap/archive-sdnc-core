@@ -163,9 +163,9 @@
 				<version>1.6.7</version>
 				<extensions>true</extensions>
 				<configuration>
-					<nexusUrl>https://nexus.openecomp.org</nexusUrl>
-					<stagingProfileId>176c31dfe190a</stagingProfileId>
-					<serverId>ecomp-staging</serverId>
+					<nexusUrl>https://${openecomp.nexus.host}</nexusUrl>
+					<stagingProfileId>${openecomp.nexus.staging.profile-id}</stagingProfileId>
+					<serverId>${openecomp.nexus.staging.server-id}</serverId>
 				</configuration>
 			</plugin>
 
