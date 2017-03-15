@@ -70,8 +70,8 @@
 		<sonar.jacoco.reportMissing.force.zero>true</sonar.jacoco.reportMissing.force.zero>
 		<sonar.projectVersion>${project.version}</sonar.projectVersion>
 
-		<sdnc.core.version>1.0.0-SNAPSHOT</sdnc.core.version>
-		<sdnc.adaptors.version>1.0.0-SNAPSHOT</sdnc.adaptors.version>
+		<sdnc.core.version>1.1.0-SNAPSHOT</sdnc.core.version>
+		<sdnc.adaptors.version>1.1.0-SNAPSHOT</sdnc.adaptors.version>
 		<sdnctl.sli.version>${sdnc.core.version}</sdnctl.sli.version>
 		<sdnctl.aai.service.version>${sdnc.adaptors.version}</sdnctl.aai.service.version>
 		<sdnctl.dblib.version>${sdnc.core.version}</sdnctl.dblib.version>
