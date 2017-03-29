@@ -8,7 +8,7 @@
 	<artifactId>sdnc-core</artifactId>
 
 	<name>SDN-C Core Components</name>
-	<url>https://wiki.openecomp.org</url>
+	<url>https://wiki.onap.org</url>
 	<description>The SDN-C core components contains the SLI, dblib and root pom</description>
 
 	<parent>
@@ -21,7 +21,7 @@
 
 	<issueManagement>
 		<system>JIRA</system>
-		<url>http://jira.openecomp.org/</url>
+		<url>http://jira.onap.org/</url>
 	</issueManagement>
 
 
@@ -34,7 +34,7 @@
 
 	<ciManagement>
 		<system>Jenkins</system>
-		<url>https://jenkins.openecomp.org/</url>
+		<url>https://jenkins.onap.org/</url>
 	</ciManagement>
 
 

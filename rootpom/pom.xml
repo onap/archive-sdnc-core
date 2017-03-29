@@ -13,14 +13,14 @@
 
 	<properties>
 
-		<openecomp.nexus.host>nexus.openecomp.org</openecomp.nexus.host>
+		<openecomp.nexus.host>nexus.onap.org</openecomp.nexus.host>
 		<openecomp.nexus.port>443</openecomp.nexus.port>
-		<openecomp.nexus.release-url>https://nexus.openecomp.org/content/repositories/releases/</openecomp.nexus.release-url>
-		<openecomp.nexus.snapshot-url>https://nexus.openecomp.org/content/repositories/snapshots/</openecomp.nexus.snapshot-url>
-		<openecomp.nexus.public-url>https://nexus.openecomp.org/content/groups/public/</openecomp.nexus.public-url>
+		<openecomp.nexus.release-url>https://nexus.onap.org/content/repositories/releases/</openecomp.nexus.release-url>
+		<openecomp.nexus.snapshot-url>https://nexus.onap.org/content/repositories/snapshots/</openecomp.nexus.snapshot-url>
+		<openecomp.nexus.public-url>https://nexus.onap.org/content/groups/public/</openecomp.nexus.public-url>
 		<openecomp.nexus.staging.server-id>ecomp-staging</openecomp.nexus.staging.server-id>
 		<openecomp.nexus.staging.profile-id>176c31dfe190a</openecomp.nexus.staging.profile-id>
-		<openecomp.git.host>gerrit.openecomp.org</openecomp.git.host>
+		<openecomp.git.host>gerrit.onap.org</openecomp.git.host>
 		<openecomp.git.port>443</openecomp.git.port>
 		<openecomp.git.project>sdnc</openecomp.git.project>
 		<openecomp.git.protocol>https</openecomp.git.protocol>
@@ -125,13 +125,13 @@
 
 
 	<name>SDNC Root</name>
-	<url>http://wiki.openecomp.org</url>
+	<url>http://wiki.onap.org</url>
 	<description>Root POM to be used for all SDNC projects</description>
 
 
 	<issueManagement>
 		<system>JIRA</system>
-		<url>https://jira.openecomp.org/</url>
+		<url>https://jira.onap.org/</url>
 	</issueManagement>
 
 	<reporting>
