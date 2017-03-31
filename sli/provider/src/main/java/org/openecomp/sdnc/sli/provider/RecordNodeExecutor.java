@@ -50,8 +50,8 @@ public class RecordNodeExecutor extends SvcLogicNodeExecutor {
 				node.getAttribute("plugin"), node, ctx);
 		String outValue = "failure";
 
-		if (LOG.isDebugEnabled()) {
-			LOG.debug(node.getNodeType()
+		if (LOG.isTraceEnabled()) {
+			LOG.trace(node.getNodeType()
 					+ " node encountered - looking for recorder class "
 					+ plugin);
 		}
@@ -71,21 +71,15 @@ public class RecordNodeExecutor extends SvcLogicNodeExecutor {
 			String curExprValue = SvcLogicExpressionResolver.evaluate(curExpr,
 					node, ctx);
 
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("executeRecordNode : parameter " + curName + " = "
+			if (LOG.isTraceEnabled()) {
+				LOG.trace("executeRecordNode : parameter " + curName + " = "
 						+ curExpr + " => " + curExprValue);
 			}
 			parmMap.put(curName, curExprValue);
 		}
 
-		BundleContext bctx = FrameworkUtil.getBundle(this.getClass())
-				.getBundleContext();
 
-		ServiceReference sref = bctx.getServiceReference(plugin);
-
-		if (sref != null) {
-			SvcLogicRecorder recorder = (SvcLogicRecorder) bctx
-					.getService(sref);
+			SvcLogicRecorder recorder = getSvcLogicResource(plugin);
 
 			if (recorder != null) {
 
@@ -99,9 +93,6 @@ public class RecordNodeExecutor extends SvcLogicNodeExecutor {
 				LOG.warn("Could not find SvcLogicRecorder object for plugin "
 						+ plugin);
 			}
-		} else {
-			LOG.warn("Cound not find service reference for plugin " + plugin);
-		}
 
 		SvcLogicNode nextNode = node.getOutcomeValue(outValue);
 		if (nextNode != null) {
@@ -117,12 +108,27 @@ public class RecordNodeExecutor extends SvcLogicNodeExecutor {
 				LOG.debug("about to execute Other branch");
 			}
 		} else {
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("no failure or Other branch found");
+			if (LOG.isTraceEnabled()) {
+				LOG.trace("no failure or Other branch found");
 			}
 		}
 		return (nextNode);
 	}
+
+    protected SvcLogicRecorder getSvcLogicResource(String plugin) {
+        BundleContext bctx = FrameworkUtil.getBundle(this.getClass())
+                .getBundleContext();
+
+        ServiceReference sref = bctx.getServiceReference(plugin);
+        if (sref != null) {
+            SvcLogicRecorder resourcePlugin = (SvcLogicRecorder) bctx
+                    .getService(sref);
+            return resourcePlugin;
+        }
+        else {
+            return null;
+        }
+    }
 
 
 

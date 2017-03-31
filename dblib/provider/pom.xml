@@ -47,6 +47,11 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>${mysql.connector.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.openecomp.sdnc.core</groupId>
+			<artifactId>dblib-common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -61,7 +66,10 @@
 						<Bundle-SymbolicName>org.openecomp.sdnc.sli.resource.dblib</Bundle-SymbolicName>
 						<Bundle-Activator>org.openecomp.sdnc.sli.resource.dblib.DBLIBResourceActivator</Bundle-Activator>
 						<Export-Package>org.openecomp.sdnc.sli.resource.dblib;version=${project.version}</Export-Package>
-						<Import-Package>org.openecomp.sdnc.sli.*,org.osgi.framework.*,org.slf4j.*,com.mysql.jdbc.*,javax.sql.*</Import-Package>
+						<!--
+						<Import-Package>org.openecomp.sdnc.sli.*,org.osgi.framework.*,org.slf4j.*,com.mysql.jdbc.*,javax.sql.*,org.apache.tomcat.*</Import-Package>
+						-->
+						<Import-Package>*</Import-Package>
 						<Embed-Transitive>true</Embed-Transitive>
 					</instructions>
 				</configuration>

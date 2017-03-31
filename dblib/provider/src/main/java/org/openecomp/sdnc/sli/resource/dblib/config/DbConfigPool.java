@@ -46,10 +46,6 @@ public class DbConfigPool {
 		return type;
 	}
 
-	public JndiConfiguration[] getJndiDbSourceArray() {
-		return configurations.toArray(new JndiConfiguration[configurations.size()]);
-	}
-
 	public JDBCConfiguration[] getJDBCbSourceArray() {
 		return configurations.toArray(new JDBCConfiguration[configurations.size()]);
 	}

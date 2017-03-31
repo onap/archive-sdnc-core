@@ -21,6 +21,7 @@
 
 package org.openecomp.sdnc.sli.provider;
 
+import org.openecomp.sdnc.sli.BreakNodeException;
 import org.openecomp.sdnc.sli.SvcLogicContext;
 import org.openecomp.sdnc.sli.SvcLogicException;
 import org.openecomp.sdnc.sli.SvcLogicExpression;
@@ -40,7 +41,7 @@ public class ForNodeExecutor extends SvcLogicNodeExecutor {
 		SvcLogicExpression atomicExpr = node.getAttribute("atomic");
 		String atomicStr = SvcLogicExpressionResolver.evaluate(atomicExpr, node, ctx);
 		boolean isAtomic = !("false".equalsIgnoreCase(atomicStr));
-		
+
 		int numOutcomes = node.getNumOutcomes();
 		String idxVar = SvcLogicExpressionResolver.evaluate(
 				node.getAttribute("index"), node, ctx);
@@ -59,21 +60,30 @@ public class ForNodeExecutor extends SvcLogicNodeExecutor {
 			startIdx = Integer.parseInt(startVal);
 			endIdx = Integer.parseInt(endVal);
 		} catch (NumberFormatException e) {
-			throw new SvcLogicException("Invalid index values [" + startVal
-					+ "," + endVal + "]");
+			SvcLogicExpression silentFailureExpr = node.getAttribute("silentFailure");
+			String silentFailure = SvcLogicExpressionResolver.evaluate(silentFailureExpr, node, ctx);
+			boolean isSilentFailure = Boolean.parseBoolean(silentFailure);
+			String message = "Invalid index values [" + startVal + "," + endVal + "]";
+			if(!isSilentFailure){
+			throw new SvcLogicException(message);
+			}else{
+			    LOG.debug(message + ". Not exiting because silentFailure was set to true.");
+			    return(null);
+			}
 		}
 
+        try {
 		for (int ctr = startIdx; ctr < endIdx; ctr++) {
 
 			ctx.setAttribute(idxVar, "" + ctr);
 
 			for (int i = 0; i < numOutcomes; i++) {
-				
+
 				if ("failure".equals(ctx.getStatus()) && isAtomic) {
 					LOG.info("For - stopped executing nodes due to failure status");
 					return(null);
 				}
-				
+
 				SvcLogicNode nextNode = node.getOutcomeValue("" + (i + 1));
 				if (nextNode != null) {
 					if (LOG.isDebugEnabled()) {
@@ -83,7 +93,6 @@ public class ForNodeExecutor extends SvcLogicNodeExecutor {
 					while (innerNextNode != null) {
 						innerNextNode = svc.executeNode(innerNextNode, ctx);
 					}
-
 				} else {
 					if (LOG.isDebugEnabled()) {
 						LOG.debug("For - done: no outcome " + (i + 1));
@@ -91,6 +100,9 @@ public class ForNodeExecutor extends SvcLogicNodeExecutor {
 				}
 			}
 		}
+        } catch (BreakNodeException br) {
+            LOG.debug("ForNodeExecutor caught break");
+        }
 		return (null);
 	}
 

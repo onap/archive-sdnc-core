@@ -119,6 +119,7 @@
         <name>AT&amp;T</name>
     </organization>
   <modules>
+    <module>common</module>
     <module>provider</module>
     <module>features</module>
     <module>installer</module>

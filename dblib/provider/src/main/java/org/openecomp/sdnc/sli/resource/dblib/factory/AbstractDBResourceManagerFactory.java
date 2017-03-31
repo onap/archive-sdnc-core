@@ -21,7 +21,6 @@
 package org.openecomp.sdnc.sli.resource.dblib.factory;
 
 import org.openecomp.sdnc.sli.resource.dblib.jdbc.JdbcDbResourceManagerFactory;
-import org.openecomp.sdnc.sli.resource.dblib.jndi.JNDIDbResourceManagerFactory;
 
 /**
  * @version $Revision: 1.1 $
@@ -33,13 +32,7 @@ import org.openecomp.sdnc.sli.resource.dblib.jndi.JNDIDbResourceManagerFactory;
 public class AbstractDBResourceManagerFactory {
 
 	public static AbstractResourceManagerFactory getFactory(String type) throws FactoryNotDefinedException {
-		
-		if("JNDI".equals(type)){
-			try {
-				return JNDIDbResourceManagerFactory.createIntstance();
-			} catch (Exception e) {
-			}
-		}
+
 		// JDBC
 		return JdbcDbResourceManagerFactory.createIntstance();
 	}

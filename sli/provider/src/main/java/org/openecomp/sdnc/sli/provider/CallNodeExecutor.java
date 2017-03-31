@@ -114,24 +114,21 @@ public class CallNodeExecutor extends SvcLogicNodeExecutor {
 			version  = SvcLogicExpressionResolver.evaluate(moduleExpr, node, ctx);
 		}
 
+		String parentGraph = ctx.getAttribute("currentGraph");
+        ctx.setAttribute("parentGraph", parentGraph);
 		
 		SvcLogicStore store = SvcLogicActivator.getStore();
 		
-		LOG.debug("Calling ["+module+","+rpc+","+version+","+mode+"]");
-		
-		if (store != null)
-		{
+        if (store != null) {
 			SvcLogicGraph calledGraph = store.fetch(module, rpc, version, mode);
-			
-			if (calledGraph != null)
-			{
+            LOG.debug("Parent " + parentGraph + " is calling child " + calledGraph.toString());
+            ctx.setAttribute("currentGraph", calledGraph.toString());
+            if (calledGraph != null) {
 				svc.execute(calledGraph, ctx);
 				
 				outValue = ctx.getStatus();
-			}
-			else
-			{
-				LOG.debug("Could not find service logic for ["+module+","+rpc+","+version+","+mode+"]");
+            } else {
+                LOG.error("Could not find service logic for [" + module + "," + rpc + "," + version + "," + mode + "]");
 			}
 		}
 		else
@@ -144,6 +141,7 @@ public class CallNodeExecutor extends SvcLogicNodeExecutor {
 			if (LOG.isDebugEnabled()) {
 				LOG.debug("about to execute " + outValue + " branch");
 			}
+            ctx.setAttribute("currentGraph", parentGraph);
 			return (nextNode);
 		}
 
@@ -157,6 +155,9 @@ public class CallNodeExecutor extends SvcLogicNodeExecutor {
 				LOG.debug("no " + outValue + " or Other branch found");
 			}
 		}
+        ctx.setAttribute("currentGraph", parentGraph);
+        ctx.setAttribute("parentGraph", null);
+
 		return (nextNode);
 
 	}

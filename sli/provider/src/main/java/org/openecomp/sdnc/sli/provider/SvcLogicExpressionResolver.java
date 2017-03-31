@@ -65,12 +65,12 @@ public class SvcLogicExpressionResolver {
 				
 				if (atomType == AtomType.CONTEXT_VAR)
 				{
-					LOG.debug("Evaluating context variable $"+varName);
+					LOG.trace("Evaluating context variable $"+varName);
 					
 					String varValue = ctx.getAttribute(varName);
 					
 					if (varValue == null) {
-						LOG.debug("Context variable $"+varName+" unset - treating as empty string");
+						LOG.trace("Context variable $"+varName+" unset - treating as empty string");
 						varValue = "";
 					}
 						
@@ -78,7 +78,7 @@ public class SvcLogicExpressionResolver {
 				}
 				SvcLogicExpression parm = node.getParameter(varName);
 				if (parm != null) {
-					LOG.debug("Evaluating value of parameter "+varName+": "+parm.asParsedExpr());
+					LOG.trace("Evaluating value of parameter "+varName+": "+parm.asParsedExpr());
 					
 					return (evaluate(parm, node, ctx));
 				}
@@ -98,7 +98,7 @@ public class SvcLogicExpressionResolver {
 				List<SvcLogicExpression> operands = binExpr.getOperands();
 				if (operands.size() == 1)
 				{
-					LOG.debug("SvcLogicBinaryExpression as no operator and one operand - evaluating its operand");
+					LOG.trace("SvcLogicBinaryExpression as no operator and one operand - evaluating its operand");
 					return(evaluate(operands.get(0), node, ctx));
 				}
 				else

@@ -21,7 +21,10 @@
 
 package org.openecomp.sdnc.sli.SliPluginUtils;
 
-
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
@@ -32,55 +35,59 @@ import org.osgi.framework.ServiceRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 public class SliPluginUtilsActivator implements BundleActivator {
-
-//    private static final String SLIPLUGINUTILS_PROP_VAR = "/slipluginutils.properties";
-//    private static final String SDNC_CONFIG_DIR = "SDNC_CONFIG_DIR";
-
-    @SuppressWarnings("rawtypes")
-    private final List<ServiceRegistration> registrations = new LinkedList<>();
+    @SuppressWarnings("rawtypes") private List<ServiceRegistration> registrations = new LinkedList<ServiceRegistration>();
 
     private static final Logger LOG = LoggerFactory.getLogger(SliPluginUtilsActivator.class);
+    private static final String SDNC_ROOT_DIR = "SDNC_CONFIG_DIR";
+    private static final String DME2_PROPERTIES_FILE_NAME = "dme2.properties";
 
     @Override
     public void start(BundleContext ctx) throws Exception {
-        // Read properties
-        Properties props = new Properties();
+        SliPluginUtils plugin = new SliPluginUtils(new Properties());
+        LOG.info("Registering service " + plugin.getClass().getName());
+        registrations.add(ctx.registerService(plugin.getClass().getName(), plugin, null));
 
-        // ---uncomment below when adding properties file---
-        /*
-        String propDir = System.getenv(SDNC_CONFIG_DIR);
-        if (propDir == null) {
-            throw new ConfigurationException(
-            "Cannot find config file - " + SLIPLUGINUTILS_PROP_VAR + " and " + SDNC_CONFIG_DIR + " unset");
-        }
-        String propPath = propDir + SLIPLUGINUTILS_PROP_VAR;
-
-        File propFile = new File(propPath);
-
-        if (!propFile.exists()) {
-            throw new ConfigurationException("Missing configuration properties file : " + propFile);
-        }
+        SliStringUtils sliStringUtils_Plugin = new SliStringUtils();
+        LOG.info("Registering service " + sliStringUtils_Plugin.getClass().getName());
+        registrations.add(ctx.registerService(sliStringUtils_Plugin.getClass().getName(), sliStringUtils_Plugin, null));
 
         try {
-            props.load(new FileInputStream(propFile));
+            String path = System.getenv(SDNC_ROOT_DIR) + File.separator + DME2_PROPERTIES_FILE_NAME;
+            DME2 dmePlugin = initDme2(path);
+            if (dmePlugin != null) {
+                LOG.info("Registering service " + dmePlugin.getClass().getName());
+                registrations.add(ctx.registerService(dmePlugin.getClass().getName(), dmePlugin, null));
+            }
         } catch (Exception e) {
-            throw new ConfigurationException("Could not load properties file " + propPath, e);
+            LOG.error("DME2 plugin could not be started", e);
         }
-        */
+    }
 
-        SliPluginUtils plugin = new SliPluginUtils(props);
+    public DME2 initDme2(String pathToDmeProperties) {
+        Properties dme2properties = new Properties();
+        String loadPropertiesErrorMessage = "Couldn't load DME2 properties at path " + pathToDmeProperties;
+        File dme2propertiesFile = new File(pathToDmeProperties);
 
-        LOG.info("Registering service "+plugin.getClass().getName());
-        registrations.add(ctx.registerService(plugin.getClass().getName(), plugin, null));
+        try {
+            dme2properties.load(new FileReader(dme2propertiesFile));
+            String proxyUrlProperty = dme2properties.getProperty("proxyUrl");
+            String[] proxyUrls = proxyUrlProperty.split(",");
+            DME2 dmePlugin = new DME2(dme2properties.getProperty("aafUserName"), dme2properties.getProperty("aafPassword"), dme2properties.getProperty("envContext"), dme2properties.getProperty("routeOffer"), proxyUrls, dme2properties.getProperty("commonServiceVersion"));
+            dmePlugin.setPartner(dme2properties.getProperty("partner"));
+            return dmePlugin;
+        } catch (FileNotFoundException e) {
+            LOG.error(loadPropertiesErrorMessage);
+        } catch (IOException e) {
+            LOG.error(loadPropertiesErrorMessage);
+        }
+        LOG.error("Couldn't create DME2 plugin");
+        return null;
     }
 
     @Override
     public void stop(BundleContext ctx) throws Exception {
-
-        for (@SuppressWarnings("rawtypes") ServiceRegistration registration: registrations)
-        {
+        for (@SuppressWarnings("rawtypes") ServiceRegistration registration : registrations) {
             registration.unregister();
             registration = null;
         }

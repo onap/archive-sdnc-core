@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.opendaylight.odlparent</groupId>
 		<artifactId>odlparent</artifactId>
-		<version>1.6.2-Beryllium-SR2</version>
+		<version>1.7.1-Boron-SR1</version>
 		<relativePath>../../../../../opendaylight/odlparent</relativePath>
 	</parent>
 
@@ -28,37 +28,13 @@
 		<opendaylight.nexus.public-url>https://nexus.opendaylight.org/content/repositories/public/</opendaylight.nexus.public-url>
 		<opendaylight.nexus.snapshot-url>https://nexus.opendaylight.org/content/repositories/opendaylight.snapshot/</opendaylight.nexus.snapshot-url>
 
-		<release-tag>R17.01</release-tag>
+		<release-tag>R17.07</release-tag>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version.source>1.8</java.version.source>
+		<java.version.target>1.8</java.version.target>
 		<bundle.plugin.version>2.5.0</bundle.plugin.version>
-		<java.version.source>1.7</java.version.source>
-		<java.version.target>1.7</java.version.target>
 		<maven.compile.plugin.version>2.5.1</maven.compile.plugin.version>
-		<equinox.osgi.version>3.8.1.v20120830-144521</equinox.osgi.version>
-		<jackson-annotations-version>${jackson.version}</jackson-annotations-version>
-		<jettison.version>1.3.7</jettison.version>
-		<jvnet.jaxb2.version>0.6.4</jvnet.jaxb2.version>
-		<apache.httpcomponents.version>4.4</apache.httpcomponents.version>
-		<antlr.version>4.5.1</antlr.version>
-		<mysql.connector.version>5.1.39</mysql.connector.version>
-		<odl.version>1.6.2-Beryllium-SR2</odl.version>
-		<odl.dlux.version>0.3.2-Beryllium-SR2</odl.dlux.version>
-		<odl.yangtools.version>0.8.2-Beryllium-SR2</odl.yangtools.version>
-		<odl.mdsal.version>1.3.2-Beryllium-SR2</odl.mdsal.version>
-		<odl.mdsal.features.version>2.0.2-Beryllium-SR2</odl.mdsal.features.version>
-		<odl.mdsal.model.version>0.8.2-Beryllium-SR2</odl.mdsal.model.version>
-		<odl.restconf.version>1.3.2-Beryllium-SR2</odl.restconf.version>
-		<odl.yangtools.version>0.8.2-Beryllium-SR2</odl.yangtools.version>
-		<odl.controller.model.version>${odl.mdsal.model.version}</odl.controller.model.version>
-		<odl.controller.config.api.version>0.4.2-Beryllium-SR2</odl.controller.config.api.version>
-		<odl.karaf.empty.distro.version>${odl.version}</odl.karaf.empty.distro.version>
-		<odl.commons.opendaylight.version>${odl.version}</odl.commons.opendaylight.version>
-		<odl.ietf-inet-types.version>2010.09.24.8.2-Beryllium-SR2</odl.ietf-inet-types.version>
-		<odl.ietf-yang-types.version>2010.09.24.8.2-Beryllium-SR2</odl.ietf-yang-types.version>
-		<odl.yang.jmx.generator.version>0.4.2-Beryllium-SR2</odl.yang.jmx.generator.version>
-		<odl.yangtools.yang.maven.plugin.version>${odl.yangtools.version}</odl.yangtools.yang.maven.plugin.version>
 		<features.file>features.xml</features.file>
-		<h2database.version>1.4.186</h2database.version>
 		<jmxGeneratorPath>src/main/yang-gen-config</jmxGeneratorPath>
 		<salGeneratorPath>src/main/yang-gen-sal</salGeneratorPath>
 		<checkstyle.skip>true</checkstyle.skip>
@@ -70,13 +46,110 @@
 		<sonar.jacoco.reportMissing.force.zero>true</sonar.jacoco.reportMissing.force.zero>
 		<sonar.projectVersion>${project.version}</sonar.projectVersion>
 
+		<!-- OpenDaylight component versions -->
+		<odl.version>1.7.1-Boron-SR1</odl.version>
+		<odl.dlux.version>0.4.1-Boron-SR1</odl.dlux.version>
+		<odl.yangtools.version>1.0.1-Boron-SR1</odl.yangtools.version>
+		<odl.mdsal.version>1.4.1-Boron-SR1</odl.mdsal.version>
+		<odl.mdsal.features.version>2.1.1-Boron-SR1</odl.mdsal.features.version>
+		<odl.mdsal.model.version>0.9.1-Boron-SR1</odl.mdsal.model.version>
+		<odl.mdsal.yang.binding.version>0.9.1-Boron-SR1</odl.mdsal.yang.binding.version>
+		<odl.restconf.version>1.4.1-Boron-SR1</odl.restconf.version>
+		<odl.controller.model.version>${odl.mdsal.model.version}</odl.controller.model.version>
+		<odl.controller.config.api.version>0.5.1-Boron-SR1</odl.controller.config.api.version>
+		<odl.karaf.empty.distro.version>${odl.version}</odl.karaf.empty.distro.version>
+		<odl.commons.opendaylight.version>${odl.version}</odl.commons.opendaylight.version>
+		<odl.ietf-inet-types.version>2010.09.24.9.1-Boron-SR1</odl.ietf-inet-types.version>
+		<odl.ietf-yang-types.version>2010.09.24.9.1-Boron-SR1</odl.ietf-yang-types.version>
+		<odl.yang.jmx.generator.version>0.5.1-Boron-SR1</odl.yang.jmx.generator.version>
+		<odl.yangtools.yang.maven.plugin.version>${odl.yangtools.version}</odl.yangtools.yang.maven.plugin.version>
+		<odl.sal.api.gen.plugin.version>0.9.1-Boron-SR1</odl.sal.api.gen.plugin.version>
+
+
+
+		<!--  SDN-C component versions  -->
 		<sdnc.core.version>1.1.0-SNAPSHOT</sdnc.core.version>
 		<sdnc.adaptors.version>1.1.0-SNAPSHOT</sdnc.adaptors.version>
+		<sdnc.northbound.version>1.1.0-SNAPSHOT</sdnc.northbound.version>
+		<sdnc.oam.version>1.1.0-SNAPSHOT</sdnc.oam.version>
+		<sdnc.plugins.version>1.1.0-SNAPSHOT</sdnc.plugins.version>
 		<sdnctl.sli.version>${sdnc.core.version}</sdnctl.sli.version>
 		<sdnctl.aai.service.version>${sdnc.adaptors.version}</sdnctl.aai.service.version>
 		<sdnctl.dblib.version>${sdnc.core.version}</sdnctl.dblib.version>
 		<sdnctl.mdsal.resource.version>${sdnc.adaptors.version}</sdnctl.mdsal.resource.version>
 		<sdnctl.slipluginutils.version>${sdnc.core.version}</sdnctl.slipluginutils.version>
+
+		<!-- Support libraries used by OpenDaylight -->
+		<!-- Used by aaa, vtn -->
+		<commons.codec.version>1.10</commons.codec.version>
+		<!-- Used by netconf, ovsdb -->
+		<commons.lang3.version>3.4</commons.lang3.version>
+		<!-- Used by sfc, snmp4sdn; see also affinity, toolkit -->
+		<commons.lang.version>2.6</commons.lang.version>
+		<!-- Used by neutron; see also controller, vtn -->
+		<commons.net.version>3.5</commons.net.version>
+		<!-- Used by neutron -->
+		<eclipse.persistence.version>2.6.2</eclipse.persistence.version>
+		<!-- Used by aaa -->
+		<felix.dependencymanager.version>4.3.0</felix.dependencymanager.version>
+		<!-- Used by lacp, netconf, ovsdb, sfc, toolkit; see also vtn -->
+		<gson.version>2.3.1</gson.version>
+		<!-- Used by aaa, dlux, persistence, snmp4sdn, sxp -->
+		<guava.version>18.0</guava.version>
+		<!-- Used by lispflowmapping, sxp, vtn/manager -->
+		<hamcrest.version>1.3</hamcrest.version>
+		<!-- Used by aaa, alto, netconf, ovsdb, sfc; see also affinity, defense4all,
+			integration/distribution, snmp4sdn, toolkit, ttp -->
+		<jackson.version>2.3.2</jackson.version>
+		<!-- Used by snmp4sdn, yangtools -->
+		<javassist.version>3.20.0-GA</javassist.version>
+
+		<!-- FIXME remove all dependencies for jersey 1.17 after migration all
+			projects -->
+		<!-- Used by aaa, alto, netconf, neutron, sfc; see also affinity, defense4all,
+			snmp4sdn, toolkit -->
+		<jersey.version>1.17</jersey.version>
+		<!-- Used by sfc -->
+		<jersey.client.version>1.17</jersey.client.version>
+
+		<!-- New packages for jersey migration 1.17 to 2.8 -->
+		<!-- appache.geronimo.bundle for DocGen -->
+		<!-- Used by aaa, iotdm, netconf, ovsdb, sfc -->
+		<org.json.version>20131018</org.json.version>
+
+		<!-- Used by sfc -->
+		<jettison.version>1.3.7</jettison.version>
+		<!-- Used by persistence -->
+		<jsr305.api.version>3.0.0</jsr305.api.version>
+		<!-- Need to stick to JUnit 4.11 until https://github.com/jayway/powermock/issues/560
+			is fixed (either in PowerMock or with a new JUnit release) -->
+		<!-- Used everywhere -->
+		<junit.version>4.11</junit.version>
+		<!-- Used by coretutorials, sfc, snmp4sdn, sxp; see also affinity, toolkit -->
+		<logback.version>1.1.7</logback.version>
+		<!-- Used by nic, sfc, sxp, tsdr -->
+		<mockito.version>1.10.19</mockito.version>
+		<!-- Used by bgpcep, netconf, ovsdb, sxp; see also opendove, toolkit -->
+		<netty.version>4.0.37.Final</netty.version>
+		<!-- Used by openflowjava, persistence, sfc, snmp4sdn, sxp; see also affinity,
+			toolkit -->
+		<slf4j.version>1.7.21</slf4j.version>
+		<!-- Used in integration/distribution; see also affinity, snmp4sdn, toolkit,
+			tsdr, ttp -->
+		<spring.version>3.2.14.RELEASE</spring.version>
+
+
+
+		<!-- Extra support libraries used by SDN-C -->
+		<equinox.osgi.version>3.8.1.v20120830-144521</equinox.osgi.version>
+		<jackson-annotations-version>${jackson.version}</jackson-annotations-version>
+		<jettison.version>1.3.7</jettison.version>
+		<jvnet.jaxb2.version>0.6.4</jvnet.jaxb2.version>
+		<apache.httpcomponents.version>4.4</apache.httpcomponents.version>
+		<antlr.version>4.5.1</antlr.version>
+		<mysql.connector.version>5.1.39</mysql.connector.version>
+		<h2database.version>1.4.186</h2database.version>
+
 	</properties>
 
 	<modelVersion>4.0.0</modelVersion>
@@ -154,7 +227,7 @@
 						<additionalDependency>
 							<groupId>org.opendaylight.odlparent</groupId>
 							<artifactId>odlparent</artifactId>
-							<version>1.6.2-Beryllium-SR2</version>
+							<version>1.7.1-Boron-SR1</version>
 						</additionalDependency>
 						<additionalDependency>
 							<groupId>org.slf4j</groupId>
@@ -215,7 +288,7 @@
 						<additionalDependency>
 							<groupId>org.opendaylight.mdsal</groupId>
 							<artifactId>yang-binding</artifactId>
-							<version>${odl.yangtools.version}</version>
+							<version>${odl.mdsal.yang.binding.version}</version>
 						</additionalDependency>
 						<additionalDependency>
 							<groupId>org.opendaylight.yangtools</groupId>
@@ -535,7 +608,7 @@
 							<additionalDependency>
 								<groupId>org.opendaylight.mdsal</groupId>
 								<artifactId>yang-binding</artifactId>
-								<version>${odl.yangtools.version}</version>
+								<version>${odl.mdsal.yang.binding.version}</version>
 							</additionalDependency>
 							<additionalDependency>
 								<groupId>org.opendaylight.yangtools</groupId>

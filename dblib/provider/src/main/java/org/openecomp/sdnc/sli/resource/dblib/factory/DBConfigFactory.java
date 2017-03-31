@@ -25,10 +25,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Properties;
 
+import org.slf4j.LoggerFactory;
+
 import org.openecomp.sdnc.sli.resource.dblib.config.BaseDBConfiguration;
 import org.openecomp.sdnc.sli.resource.dblib.config.DbConfigPool;
 import org.openecomp.sdnc.sli.resource.dblib.config.JDBCConfiguration;
-import org.openecomp.sdnc.sli.resource.dblib.config.JndiConfiguration;
 
 /**
  * @version $Revision: 1.1 $
@@ -44,7 +45,7 @@ public class DBConfigFactory {
 	}
 
 	static DbConfigPool getConfigparams(Properties properties){
-		org.slf4j.LoggerFactory.getLogger(DBConfigFactory.class).info(properties.toString());
+		LoggerFactory.getLogger(DBConfigFactory.class).info(properties.toString());
 		DbConfigPool xmlConfig = new DbConfigPool(properties);
 		ArrayList<Properties> propertySets = new ArrayList<Properties>();
 
@@ -78,7 +79,7 @@ public class DBConfigFactory {
 			}
 
 		} catch (Exception e) {
-			org.slf4j.LoggerFactory.getLogger(DBConfigFactory.class).warn("",e);
+			LoggerFactory.getLogger(DBConfigFactory.class).warn("",e);
 		}
 
 		return xmlConfig;
@@ -89,15 +90,12 @@ public class DBConfigFactory {
 		String type = props.getProperty(BaseDBConfiguration.DATABASE_TYPE);
 
 		BaseDBConfiguration config = null;
-		
-		if("JNDI".equalsIgnoreCase(type)) {
-			config = new JndiConfiguration(props);
-		}
+
 		if("JDBC".equalsIgnoreCase(type)) {
 			config = new JDBCConfiguration(props);
 		}
 
 		return config;
-		
+
 	}
 }

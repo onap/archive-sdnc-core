@@ -173,7 +173,7 @@ public class SetNodeExecutor extends SvcLogicNodeExecutor {
 							curEnt.getValue(), node, ctx);
 
 					if (LOG.isDebugEnabled()) {
-						LOG.debug("Parameter value "
+						LOG.trace("Parameter value "
 								+ curEnt.getValue().asParsedExpr()
 								+ " resolves to " + curValue);
 						LOG.debug("Setting context attribute " + lhsVarName

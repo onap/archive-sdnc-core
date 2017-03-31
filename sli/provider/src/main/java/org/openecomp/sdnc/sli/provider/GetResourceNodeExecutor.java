@@ -84,14 +84,8 @@ public class GetResourceNodeExecutor extends SvcLogicNodeExecutor {
 					+ plugin);
 		}
 
-		BundleContext bctx = FrameworkUtil.getBundle(this.getClass())
-				.getBundleContext();
 
-		ServiceReference sref = bctx.getServiceReference(plugin);
-
-		if (sref != null) {
-			SvcLogicResource resourcePlugin = (SvcLogicResource) bctx
-					.getService(sref);
+			SvcLogicResource resourcePlugin = getSvcLogicResource(plugin);
 
 			if (resourcePlugin != null) {
 
@@ -116,9 +110,7 @@ public class GetResourceNodeExecutor extends SvcLogicNodeExecutor {
 				LOG.warn("Could not find SvcLogicResource object for plugin "
 						+ plugin);
 			}
-		} else {
-			LOG.warn("Cound not find service reference for plugin " + plugin);
-		}
+
 
 		SvcLogicNode nextNode = node.getOutcomeValue(outValue);
 		if (nextNode != null) {
@@ -141,6 +133,22 @@ public class GetResourceNodeExecutor extends SvcLogicNodeExecutor {
 		}
 		return (nextNode);
 	}
+	
+    protected SvcLogicResource getSvcLogicResource(String plugin) {
+        BundleContext bctx = FrameworkUtil.getBundle(this.getClass())
+                .getBundleContext();
+
+        ServiceReference sref = bctx.getServiceReference(plugin);
+        if (sref != null) {
+            SvcLogicResource resourcePlugin = (SvcLogicResource) bctx
+                    .getService(sref);
+            return resourcePlugin;
+        }
+        else {
+            LOG.warn("Could not find service reference object for plugin " + plugin);
+            return null;
+        }
+    }
 
 
 }

@@ -53,7 +53,6 @@ import org.openecomp.sdnc.sli.resource.dblib.pm.SQLExecutionMonitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sun.rowset.providers.RIOptimisticProvider;
 
 /**
  * @version $Revision: 1.15 $
@@ -87,7 +86,7 @@ public class DBResourceManager implements DataSource, DataAccessor, DBResourceOb
 			}
 			return 0;
 		}
-		
+
 	});
 	protected final Set<CachedDataSource> broken = Collections.synchronizedSet(new HashSet<CachedDataSource>());
 	protected final Object monitor = new Object();
@@ -131,17 +130,6 @@ public class DBResourceManager implements DataSource, DataAccessor, DBResourceOb
 		worker.setName("DBResourcemanagerWatchThread");
 		worker.setDaemon(true);
 		worker.start();
-		
-		try {
-			RIOptimisticProvider rio  = new RIOptimisticProvider();
-			LOGGER.info("Class " + rio.getClass().getName() + " found.");
-			Class clas = this.getClass().getClassLoader().loadClass("com.sun.rowset.providers.RIOptimisticProvider");
-			if(clas != null) {
-				LOGGER.info("Class " + rio.getClass().getName() + " found by classloader.");
-			}
-		} catch(Exception exc) {
-			LOGGER.info("Failed resolving RIOptimisticProvider class", exc);
-		}
 	}
 
 	private void config(Properties ctx) throws Exception {
@@ -320,7 +308,7 @@ public class DBResourceManager implements DataSource, DataAccessor, DBResourceOb
 			Collections.reverse(sources);
 		}
 
-		
+
 		// loop through available data sources to retrieve data.
 		while(!sources.isEmpty())
 		{
@@ -428,7 +416,7 @@ public class DBResourceManager implements DataSource, DataAccessor, DBResourceOb
 	public boolean writeData(String statement, ArrayList<String> arguments, String preferredDS) throws SQLException {
 		return writeDataNoRecovery(statement, arguments, preferredDS);
 	}
-	
+
 	CachedDataSource findMaster() {
 		CachedDataSource master = null;
 		CachedDataSource[] dss = this.dsQueue.toArray(new CachedDataSource[0]);
@@ -468,7 +456,7 @@ public class DBResourceManager implements DataSource, DataAccessor, DBResourceOb
 						active = master;
 					}
 				}
-				
+
 				return active.writeData(statement, arguments);
 			} catch(Throwable exc){
 				String message = exc.getMessage();

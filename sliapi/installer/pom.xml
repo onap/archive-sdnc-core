@@ -8,7 +8,6 @@
 		<version>1.1.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>sliapi-installer</artifactId>
-	<name>SLI API  - Karaf  Installer</name>
 	<packaging>pom</packaging>
 
 	<properties>

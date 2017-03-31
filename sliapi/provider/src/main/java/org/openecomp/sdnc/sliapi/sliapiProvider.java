@@ -203,7 +203,7 @@ public class sliapiProvider implements AutoCloseable, SLIAPIService{
 
 		if (svcLogic == null) {
 			respBuilder.setResponseCode("500");
-			respBuilder.setResponseText("Could not locate OSGi SvcLogicService service");
+			respBuilder.setResponseMessage("Could not locate OSGi SvcLogicService service");
 			respBuilder.setAckFinalIndicator("Y");
 
 		    rpcResult = RpcResultBuilder.<ExecuteGraphOutput> status(true).withResult(respBuilder.build()).build();
@@ -214,7 +214,7 @@ public class sliapiProvider implements AutoCloseable, SLIAPIService{
 		try {
 			if (!svcLogic.hasGraph(calledModule, calledRpc, null, modeStr)) {
 				respBuilder.setResponseCode("404");
-				respBuilder.setResponseText("Directed graph for "+calledModule+"/"+calledRpc+"/"+modeStr+" not found");
+				respBuilder.setResponseMessage("Directed graph for "+calledModule+"/"+calledRpc+"/"+modeStr+" not found");
 				respBuilder.setAckFinalIndicator("Y");
 
 			    rpcResult = RpcResultBuilder.<ExecuteGraphOutput> status(true).withResult(respBuilder.build()).build();
@@ -224,7 +224,7 @@ public class sliapiProvider implements AutoCloseable, SLIAPIService{
 			LOG.error("Caught exception looking for directed graph for "+calledModule+"/"+calledRpc+"/"+modeStr, e);
 
 			respBuilder.setResponseCode("500");
-			respBuilder.setResponseText("Internal error : could not determine if target graph exists");
+			respBuilder.setResponseMessage("Internal error : could not determine if target graph exists");
 			respBuilder.setAckFinalIndicator("Y");
 
 		    rpcResult = RpcResultBuilder.<ExecuteGraphOutput> status(true).withResult(respBuilder.build()).build();
@@ -265,7 +265,7 @@ public class sliapiProvider implements AutoCloseable, SLIAPIService{
 		try {
 			LOG.info("Calling directed graph for "+calledModule+"/"+calledRpc+"/"+modeStr);
 
-			if (LOG.isDebugEnabled()) {
+			if (LOG.isTraceEnabled()) {
 				StringBuffer argList = new StringBuffer();
 				argList.append("Parameters : {");
 				Enumeration e = parms.propertyNames();
@@ -274,7 +274,7 @@ public class sliapiProvider implements AutoCloseable, SLIAPIService{
 					argList.append(" ("+propName+","+parms.getProperty(propName)+") ");
 				}
 				argList.append("}");
-				LOG.debug(argList.toString());
+				LOG.trace(argList.toString());
 				argList = null;
 			}
 
@@ -283,9 +283,22 @@ public class sliapiProvider implements AutoCloseable, SLIAPIService{
 			Properties respProps = svcLogic.execute(calledModule, calledRpc,
 					null, modeStr, parms, domDataBroker);
 
+			StringBuilder sb = new StringBuilder("{");
+			
+			for (Object key : respProps.keySet()) {
+				String keyValue = (String) key;
+				if (keyValue != null && !"".equals(keyValue) && !keyValue.contains("input.sli-parameter")) {
+					sb.append("\"").append(keyValue).append("\": \"").append(respProps.getProperty(keyValue)).append("\",");
+				}
+			}
+			
+			sb.setLength(sb.length() - 1);
+			sb.append("}");
+			
 			respBuilder.setResponseCode(respProps.getProperty("error-code", "0"));
-			respBuilder.setResponseText(respProps.getProperty("error-message", ""));
+			respBuilder.setResponseMessage(respProps.getProperty("error-message", ""));// TODO change response-text to response-message to match other BVC APIs
 			respBuilder.setAckFinalIndicator(respProps.getProperty("ack-final", "Y"));
+			respBuilder.setContextMemoryJson(sb.toString());
 
 			TestResultBuilder testResultBuilder = new TestResultBuilder();
 
@@ -308,7 +321,7 @@ public class sliapiProvider implements AutoCloseable, SLIAPIService{
 
 			respBuilder.setResponseCode("500");
 			respBuilder
-					.setResponseText("Internal error : caught exception executing directed graph "
+					.setResponseMessage("Internal error : caught exception executing directed graph "
 							+ calledModule
 							+ "/"
 							+ calledRpc
@@ -359,7 +372,7 @@ public class sliapiProvider implements AutoCloseable, SLIAPIService{
 
 		if (svcLogic == null) {
 			respBuilder.setResponseCode("500");
-			respBuilder.setResponseText("Could not locate OSGi SvcLogicService service");
+			respBuilder.setResponseMessage("Could not locate OSGi SvcLogicService service");
 			respBuilder.setAckFinalIndicator("Y");
 
 		    rpcResult = RpcResultBuilder.<HealthcheckOutput> failed().withResult(respBuilder.build()).build();
@@ -369,7 +382,7 @@ public class sliapiProvider implements AutoCloseable, SLIAPIService{
 		try {
 			if (!svcLogic.hasGraph(calledModule, calledRpc, null, modeStr)) {
 				respBuilder.setResponseCode("404");
-				respBuilder.setResponseText("Directed graph for "+calledModule+"/"+calledRpc+"/"+modeStr+" not found");
+				respBuilder.setResponseMessage("Directed graph for "+calledModule+"/"+calledRpc+"/"+modeStr+" not found");
 
 				respBuilder.setAckFinalIndicator("Y");
 
@@ -380,7 +393,7 @@ public class sliapiProvider implements AutoCloseable, SLIAPIService{
 			LOG.error("Caught exception looking for directed graph for "+calledModule+"/"+calledRpc+"/"+modeStr, e);
 
 			respBuilder.setResponseCode("500");
-			respBuilder.setResponseText("Internal error : could not determine if target graph exists");
+			respBuilder.setResponseMessage("Internal error : could not determine if target graph exists");
 			respBuilder.setAckFinalIndicator("Y");
 
 		    rpcResult = RpcResultBuilder.<HealthcheckOutput> failed().withResult(respBuilder.build()).build();
@@ -396,7 +409,7 @@ public class sliapiProvider implements AutoCloseable, SLIAPIService{
 					null, modeStr, parms);
 
 			respBuilder.setResponseCode(respProps.getProperty("error-code", "0"));
-			respBuilder.setResponseText(respProps.getProperty("error-message", ""));
+			respBuilder.setResponseMessage(respProps.getProperty("error-message", ""));
 			respBuilder.setAckFinalIndicator(respProps.getProperty("ack-final", "Y"));
 
 		} catch (Exception e) {
@@ -405,7 +418,7 @@ public class sliapiProvider implements AutoCloseable, SLIAPIService{
 
 			respBuilder.setResponseCode("500");
 			respBuilder
-					.setResponseText("Internal error : caught exception executing directed graph "
+					.setResponseMessage("Internal error : caught exception executing directed graph "
 							+ calledModule
 							+ "/"
 							+ calledRpc

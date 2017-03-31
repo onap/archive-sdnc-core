@@ -32,7 +32,6 @@ import org.openecomp.sdnc.sli.resource.dblib.DBResourceManager;
 import org.openecomp.sdnc.sli.resource.dblib.config.BaseDBConfiguration;
 import org.openecomp.sdnc.sli.resource.dblib.config.DbConfigPool;
 import org.openecomp.sdnc.sli.resource.dblib.config.JDBCConfiguration;
-import org.openecomp.sdnc.sli.resource.dblib.config.JndiConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,20 +48,15 @@ public abstract class AbstractResourceManagerFactory {
 	public abstract CachedDataSource[] initDBResourceManager(DbConfigPool dbConfig, DBResourceManager manager) throws Exception;
 	public abstract CachedDataSource[] initDBResourceManager(DbConfigPool dbConfig,	DBResourceManager dbResourceManager, String sourceName) throws SQLException ;
 
-	
+
 	public static AbstractResourceManagerFactory createIntstance() throws FactoryNotDefinedException {
 		throw new FactoryNotDefinedException("Factory method 'createIntstance' needs to be overriden in DBResourceManagerFactory");
 	}
 
-	public class DBInitTask implements Callable<CachedDataSource> 
+	public class DBInitTask implements Callable<CachedDataSource>
 	{
 		private BaseDBConfiguration config = null;
 		private Set<DBInitTask> activeTasks;
-		
-		public DBInitTask(JndiConfiguration jndiConfig, Set<DBInitTask> tasks){
-			this.config = jndiConfig;
-			this.activeTasks = tasks;
-		}
 
 		public DBInitTask(JDBCConfiguration jdbcconfig, Set<DBInitTask> tasks) {
 			this.config = jdbcconfig;
@@ -97,6 +91,7 @@ public abstract class AbstractResourceManagerFactory {
 						worker.start();
 					} else {
 						if(LOGGER.isDebugEnabled())
+							if(ds != null)
 							LOGGER.debug("Completed CachedDataSource.Call from "+ds.getDbConnectionName());
 					}
 				}

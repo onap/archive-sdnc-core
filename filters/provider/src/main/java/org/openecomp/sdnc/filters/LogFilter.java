@@ -47,7 +47,7 @@ import java.util.TimeZone;
 
 
 /**
- * Logs IN request according ECOMP Logging Guidelines
+ * Logs IN request according ECOMP Logging Guidelines at https://tspace.web.att.com/viewer/app/lcfiles/ae5f7751-39da-4c6b-8a83-5836c8c815e1/content
  */
 public class LogFilter implements Filter {
 

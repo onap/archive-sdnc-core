@@ -60,14 +60,14 @@ public class SvcLogicContextList {
 
         // Initialize list
         int capacity = getCtxListLength(ctx, prefix);
-        this.list = new ArrayList<>( capacity );
+        this.list = new ArrayList<HashMap<String, String>>(capacity);
         for( int i = 0; i < capacity; i++ ) {
             this.list.add(i, new HashMap<String,String>());
         }
 
         // Populate "elements" in list
         String prefix_bracket = this.prefix + '[';
-        for( String key : new HashSet<>(ctx.getAttributeKeySet()) ) {
+        for (String key : new HashSet<String>(ctx.getAttributeKeySet())) {
             if( key.startsWith(prefix_bracket) ) {
                 // Extract the index of the list
                 int index = getCtxListIndex(key, this.prefix, capacity);
@@ -160,8 +160,7 @@ public class SvcLogicContextList {
             for( Map.Entry<String,String> entry : this.list.get(i).entrySet() ) {
                 if( entry.getKey().equals("") ) {
                     ctx.setAttribute(prefix + '[' + i + ']', entry.getValue());
-                }
-                else {
+                } else {
                     ctx.setAttribute(prefix + '[' + i + "]." + entry.getKey(), entry.getValue());
                 }
             }
@@ -176,16 +175,9 @@ public class SvcLogicContextList {
     private static int getCtxListIndex( String key, String prefix, int list_size ) {
         int index = getCtxListIndex( key, prefix );
         if( index >= list_size ) {
-            throw new IllegalArgumentException(
-                    "Context memory list \"" + prefix + "[]\" contains an index >= the size of the list",
-                    new ArrayIndexOutOfBoundsException( "index \"" + index + "\" is outside the bounds of the context memory list \"" + prefix + "[]. List Length = " + list_size )
-            );
-        }
-        else if( index < 0 ) {
-            throw new IllegalArgumentException(
-                    "Context memory list \"" + prefix + "[]\" contains a negative index",
-                    new NegativeArraySizeException( "index \"" + index + "\" of context memory list is negative" )
-            );
+            throw new IllegalArgumentException("Context memory list \"" + prefix + "[]\" contains an index >= the size of the list", new ArrayIndexOutOfBoundsException("index \"" + index + "\" is outside the bounds of the context memory list \"" + prefix + "[]. List Length = " + list_size));
+        } else if (index < 0) {
+            throw new IllegalArgumentException("Context memory list \"" + prefix + "[]\" contains a negative index", new NegativeArraySizeException("index \"" + index + "\" of context memory list is negative"));
         }
 
         return index;
@@ -196,8 +188,7 @@ public class SvcLogicContextList {
         String ctx_index_str = StringUtils.substringBetween(key.substring(prefix.length()), "[", "]");
         try {
             return Integer.parseInt( ctx_index_str );
-        }
-        catch( NumberFormatException e ) {
+        } catch (NumberFormatException e) {
             throw new IllegalStateException("Could not parse index value \"" + ctx_index_str + "\" in context memory key \"" + key + "\"", e);
         }
     }
@@ -208,12 +199,10 @@ public class SvcLogicContextList {
         String _length_val_str = ctx.getAttribute(_length_key);
         try {
             return Integer.parseInt(_length_val_str);
-        }
-        catch( NumberFormatException e ) {
+        } catch (NumberFormatException e) {
             if( _length_val_str == null ) {
                 throw new IllegalStateException( "Could not find list length \"" + _length_key + "\" in context memory." );
-            }
-            else {
+            } else {
                 throw new IllegalStateException( "Could not parse index value \"" + _length_val_str + "\" of context memory list length \"" + _length_key + "\"" , e );
             }
         }

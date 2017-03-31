@@ -48,7 +48,10 @@ module SLI-API {
         leaf ack-final-indicator {
             type string;
         }
-        leaf response-text {
+        leaf response-message {
+            type string;
+        }
+        leaf context-memory-json {
             type string;
         }
     }

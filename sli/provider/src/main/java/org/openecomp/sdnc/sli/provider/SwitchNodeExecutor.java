@@ -55,8 +55,7 @@ public class SwitchNodeExecutor extends SvcLogicNodeExecutor {
 
 		if (LOG.isDebugEnabled()) {
 			if (nextNode != null) {
-				LOG.debug("Next node to execute is node "
-						+ nextNode.getNodeId());
+                LOG.debug("Next node to execute is node " + nextNode.getNodeId());
 			} else {
 				LOG.debug("No next node found");
 			}

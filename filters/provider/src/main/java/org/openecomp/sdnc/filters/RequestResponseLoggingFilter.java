@@ -30,7 +30,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.Enumeration;
 import java.util.zip.GZIPInputStream;
-import java.util.zip.Inflater;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -57,6 +56,7 @@ public class RequestResponseLoggingFilter implements Filter {
 			this.baos = baos;
 		}
 
+		@Override
 		public void write(int param) throws IOException {
 			baos.write(param);
 		}
@@ -91,14 +91,17 @@ public class RequestResponseLoggingFilter implements Filter {
 			this.bais = bais;
 		}
 
+		@Override
 		public int available() {
 			return bais.available();
 		}
 
+		@Override
 		public int read() {
 			return bais.read();
 		}
 
+		@Override
 		public int read(byte[] buf, int off, int len) {
 			return bais.read(buf, off, len);
 		}
@@ -129,6 +132,7 @@ public class RequestResponseLoggingFilter implements Filter {
 
 		}
 
+		@Override
 		public ServletInputStream getInputStream() {
 			try {
 				bais = new ByteArrayInputStream(buffer);
@@ -146,9 +150,11 @@ public class RequestResponseLoggingFilter implements Filter {
 
 	}
 
+	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 	}
 
+	@Override
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
 			throws IOException, ServletException {
 
@@ -177,10 +183,12 @@ public class RequestResponseLoggingFilter implements Filter {
 
 		final ByteArrayPrintWriter pw = new ByteArrayPrintWriter();
 		HttpServletResponse wrappedResp = new HttpServletResponseWrapper(response) {
+			@Override
 			public PrintWriter getWriter() {
 				return pw.getWriter();
 			}
 
+			@Override
 			public ServletOutputStream getOutputStream() {
 				return pw.getStream();
 			}
@@ -188,15 +196,16 @@ public class RequestResponseLoggingFilter implements Filter {
 		};
 
 		try {
-			
+
 		filterChain.doFilter(bufferedRequest, wrappedResp);
-		
+
 		}catch (Exception e){
 			log.error("Chain Exception",e);
 			throw e;
 		} finally {
 		byte[] bytes = pw.toByteArray();
 		response.getOutputStream().write(bytes);
+		response.getOutputStream().flush();
 
 		StringBuilder responseHeaders = new StringBuilder("RESPONSE HEADERS|");
 
@@ -220,6 +229,7 @@ public class RequestResponseLoggingFilter implements Filter {
 		}
 	}
 
+	@Override
 	public void destroy() {
 	}
 

@@ -40,3 +40,5 @@ ExprGrammarLexer.tokens
 
 # BlackDuck generated file
 sdnc-core_bdio.jsonld
+blackDuckHubProjectName.txt
+blackDuckHubProjectVersionName.txt

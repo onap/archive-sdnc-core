@@ -21,6 +21,7 @@
 
 package org.openecomp.sdnc.sli.provider;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -44,6 +45,7 @@ public class ExecuteNodeExecutor extends SvcLogicNodeExecutor {
 	private static final Logger LOG = LoggerFactory
 			.getLogger(ExecuteNodeExecutor.class);
 
+	private static final String pluginErrorMessage = "Could not execute plugin. SvcLogic status will be set to failure.";
 	public SvcLogicNode execute(SvcLogicServiceImpl svc, SvcLogicNode node,
 			SvcLogicContext ctx) throws SvcLogicException {
 
@@ -55,35 +57,30 @@ public class ExecuteNodeExecutor extends SvcLogicNodeExecutor {
 			LOG.debug("execute node encountered - looking for plugin "
 					+ pluginName);
 		}
-		
-		BundleContext bctx = FrameworkUtil.getBundle(this.getClass())
-				.getBundleContext();
 
-		ServiceReference sref = bctx.getServiceReference(pluginName);
+        SvcLogicJavaPlugin plugin  = getSvcLogicJavaPlugin(pluginName);
 
-		if (sref == null) {
+		if (plugin == null) {
 			outValue = "not-found";
 		} else {
-			SvcLogicJavaPlugin plugin  = (SvcLogicJavaPlugin) bctx
-					.getService(sref);
-			
-			String methodName = SvcLogicExpressionResolver.evaluate(node.getAttribute("method"),  node, ctx);
-			
+
+			String methodName = evaluate(node.getAttribute("method"),  node, ctx);
+
 			Class pluginClass = plugin.getClass();
-			
+
 			Method pluginMethod = null;
-			
+
 			try {
 				pluginMethod = pluginClass.getMethod(methodName, Map.class, SvcLogicContext.class);
-			} catch (Exception e) {
-				LOG.error("Caught exception looking for method "+pluginName+"."+methodName+"(Map, SvcLogicContext)");
+			} catch (NoSuchMethodException e) {
+				LOG.error(pluginErrorMessage, e);
 			}
-			
+
 			if (pluginMethod == null) {
 				outValue = "unsupported-method";
 			} else {
 				try {
-					
+
 					Map<String, String> parmMap = new HashMap<String, String>();
 
 					Set<Map.Entry<String, SvcLogicExpression>> parmSet = node
@@ -95,21 +92,34 @@ public class ExecuteNodeExecutor extends SvcLogicNodeExecutor {
 						String curName = curEnt.getKey();
 						SvcLogicExpression curExpr = curEnt.getValue();
 						String curExprValue = SvcLogicExpressionResolver.evaluate(curExpr, node, ctx);
-						
+
 						LOG.debug("Parameter "+curName+" = "+curExpr.asParsedExpr()+" resolves to "+curExprValue);
 
 						parmMap.put(curName,curExprValue);
 					}
-					
-					pluginMethod.invoke(plugin, parmMap, ctx);
-					
-					outValue = "success";
-				} catch (Exception e) {
-					LOG.error("Caught exception executing "+pluginName+"."+methodName, e);
-					
+
+					Object o = pluginMethod.invoke(plugin, parmMap, ctx);
+			        String emitsOutcome = SvcLogicExpressionResolver.evaluate(node.getAttribute("emitsOutcome"),  node, ctx);
+
+					outValue = mapOutcome(o, emitsOutcome);
+
+				} catch (InvocationTargetException e) {
+				    if(e.getCause() != null){
+	                    LOG.error(pluginErrorMessage, e.getCause());
+				    }else{
+					LOG.error(pluginErrorMessage, e);
+				    }
 					outValue = "failure";
 					ctx.setStatus("failure");
-				}
+				} catch (IllegalAccessException e) {
+                    LOG.error(pluginErrorMessage, e);
+                    outValue = "failure";
+                    ctx.setStatus("failure");
+                } catch (IllegalArgumentException e) {
+                    LOG.error(pluginErrorMessage, e);
+                    outValue = "failure";
+                    ctx.setStatus("failure");
+                }
 			}
 
 		}
@@ -134,5 +144,38 @@ public class ExecuteNodeExecutor extends SvcLogicNodeExecutor {
 		}
 		return (nextNode);
 	}
+
+	protected SvcLogicJavaPlugin getSvcLogicJavaPlugin(String pluginName){
+	       BundleContext bctx = FrameworkUtil.getBundle(this.getClass())
+	                .getBundleContext();
+
+	        ServiceReference sref = bctx.getServiceReference(pluginName);
+
+	        if (sref == null) {
+	            LOG.warn("Could not find service reference object for plugin " + pluginName);
+	            return null;
+	        } else {
+	            SvcLogicJavaPlugin plugin  = (SvcLogicJavaPlugin) bctx
+	                    .getService(sref);
+	            return plugin;
+	        }
+	}
+	protected String evaluate(SvcLogicExpression expr, SvcLogicNode node, SvcLogicContext ctx) throws SvcLogicException {
+        return SvcLogicExpressionResolver.evaluate(node.getAttribute("method"), node, ctx);
+    }
+
+    public String mapOutcome(Object o, String emitsOutcome) {
+        if (emitsOutcome != null) {
+            Boolean nodeEmitsOutcome = Boolean.valueOf(emitsOutcome);
+            if (nodeEmitsOutcome) {
+                return (String) o;
+            } else {
+                return "success";
+            }
+
+        } else {
+            return "success";
+        }
+    }
 
 }

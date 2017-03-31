@@ -42,7 +42,7 @@ public class SvcLogicExpressionFactory {
 	
 	public static SvcLogicExpression parse(String exprStr) throws IOException
 	{
-		LOG.debug("parse("+exprStr+")");
+		LOG.trace("parse("+exprStr+")");
 		InputStream exprStream = new ByteArrayInputStream(exprStr.getBytes());
 		CharStream input = new ANTLRInputStream(exprStream);
 		ExprGrammarLexer lexer = new ExprGrammarLexer(input);

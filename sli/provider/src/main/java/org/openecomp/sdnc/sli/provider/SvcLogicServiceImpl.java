@@ -268,6 +268,8 @@ public class SvcLogicServiceImpl implements SvcLogicService {
 
 		LOG.info("Executing root node");
 		SvcLogicContext ctx = new SvcLogicContext(props);
+        ctx.setAttribute("currentGraph", graph.toString());
+        ctx.setAttribute("X-ECOMP-RequestID", MDC.get("X-ECOMP-RequestID"));
 		ctx.setDomDataBroker(domDataBroker);
 		SvcLogicNode curNode = graph.getRootNode();
 

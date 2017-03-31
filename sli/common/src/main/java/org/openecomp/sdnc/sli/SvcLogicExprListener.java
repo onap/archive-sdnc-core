@@ -77,7 +77,7 @@ public class SvcLogicExprListener extends ExprGrammarBaseListener
 	
 	private void pushExpr(SvcLogicExpression expr)
 	{
-		LOG.debug("Pushing expression ["+expr.getClass().getName()+"]");
+		LOG.trace("Pushing expression ["+expr.getClass().getName()+"]");
 		if (curExpr != null)
 		{
 			exprStack.push(curExpr);
@@ -89,7 +89,7 @@ public class SvcLogicExprListener extends ExprGrammarBaseListener
 	{
 		if (exprStack.isEmpty())
 		{
-			LOG.debug("Popping last expression");
+			LOG.trace("Popping last expression");
 			topExpr = curExpr;
 		}
 		else
@@ -97,7 +97,7 @@ public class SvcLogicExprListener extends ExprGrammarBaseListener
 			SvcLogicExpression lastExpr = curExpr;
 			curExpr = exprStack.pop();
 			curExpr.addOperand(lastExpr);
-			LOG.debug("New curExpr is ["+curExpr.getClass().getName()+"]");
+			LOG.trace("New curExpr is ["+curExpr.getClass().getName()+"]");
 		}
 		
 	}
@@ -107,7 +107,7 @@ public class SvcLogicExprListener extends ExprGrammarBaseListener
 		
 		String atomText = ctx.getText();
 		
-		LOG.debug("enterAtom: text = "+atomText);
+		LOG.trace("enterAtom: text = "+atomText);
 
 		
 		SvcLogicAtom newAtom = new SvcLogicAtom(atomText);
@@ -118,7 +118,7 @@ public class SvcLogicExprListener extends ExprGrammarBaseListener
 
 	@Override
 	public void enterMultExpr(MultExprContext ctx) {
-		LOG.debug("enterMultExpr: text = "+ctx.getText());
+		LOG.trace("enterMultExpr: text = "+ctx.getText());
 		
 		SvcLogicBinaryExpression curBinExpr = new SvcLogicBinaryExpression();
 		pushExpr(curBinExpr);
@@ -127,7 +127,7 @@ public class SvcLogicExprListener extends ExprGrammarBaseListener
 		
 		for (TerminalNode nd : opList)
 		{
-			LOG.debug("enterMultExpr: operator - "+nd.getText());
+			LOG.trace("enterMultExpr: operator - "+nd.getText());
 			curBinExpr.addOperator(nd.getText());
 		}
 
@@ -136,7 +136,7 @@ public class SvcLogicExprListener extends ExprGrammarBaseListener
 	@Override
 	public void exitMultExpr(MultExprContext ctx) {
 
-		LOG.debug("exitMultExpr: text = "+ctx.getText());
+		LOG.trace("exitMultExpr: text = "+ctx.getText());
 
 		popExpr();
 		
@@ -144,13 +144,13 @@ public class SvcLogicExprListener extends ExprGrammarBaseListener
 
 	@Override
 	public void exitAtom(AtomContext ctx) {
-		LOG.debug("exitAtom: text = "+ctx.getText());
+		LOG.trace("exitAtom: text = "+ctx.getText());
 		popExpr();
 	}
 
 	@Override
 	public void enterAddExpr(AddExprContext ctx) {
-		LOG.debug("enterAddExpr: text = "+ctx.getText());
+		LOG.trace("enterAddExpr: text = "+ctx.getText());
 		List<TerminalNode> opList = ctx.ADDOP();
 		
 
@@ -160,7 +160,7 @@ public class SvcLogicExprListener extends ExprGrammarBaseListener
 		
 		for (TerminalNode nd : opList)
 		{
-			LOG.debug("enterAddExpr: operator - "+nd.getText());
+			LOG.trace("enterAddExpr: operator - "+nd.getText());
 			curBinExpr.addOperator(nd.getText());
 		}
 		
@@ -168,19 +168,19 @@ public class SvcLogicExprListener extends ExprGrammarBaseListener
 
 	@Override
 	public void exitAddExpr(AddExprContext ctx) {
-		LOG.debug("exitAddExpr: text = "+ctx.getText());
+		LOG.trace("exitAddExpr: text = "+ctx.getText());
 		
 		popExpr();
 	}
 
 	@Override
 	public void enterFuncExpr(FuncExprContext ctx) {
-		LOG.debug("enterFuncExpr: text = "+ctx.getText());
-		LOG.debug("enterFuncExpr - IDENTIFIER : "+ctx.IDENTIFIER().getText());
+		LOG.trace("enterFuncExpr: text = "+ctx.getText());
+		LOG.trace("enterFuncExpr - IDENTIFIER : "+ctx.IDENTIFIER().getText());
 		
 		for (ExprContext expr: ctx.expr())
 		{
-			LOG.debug("enterFuncExpr - expr = "+expr.getText());
+			LOG.trace("enterFuncExpr - expr = "+expr.getText());
 		}
 		
 
@@ -189,25 +189,25 @@ public class SvcLogicExprListener extends ExprGrammarBaseListener
 
 	@Override
 	public void exitFuncExpr(FuncExprContext ctx) {
-		LOG.debug("exitFuncExpr: text = "+ctx.getText());
+		LOG.trace("exitFuncExpr: text = "+ctx.getText());
 		
 		popExpr();
 	}
 
 	@Override
 	public void enterParenExpr(ParenExprContext ctx) {
-		LOG.debug("enterParenExpr: text = "+ctx.getText());
-		LOG.debug("enterParenExpr: expr = "+ctx.expr().getText());
+		LOG.trace("enterParenExpr: text = "+ctx.getText());
+		LOG.trace("enterParenExpr: expr = "+ctx.expr().getText());
 	}
 
 	@Override
 	public void exitParenExpr(ParenExprContext ctx) {
-		LOG.debug("exitParenExpr: text = "+ctx.getText());
+		LOG.trace("exitParenExpr: text = "+ctx.getText());
 	}
 
 	@Override
 	public void enterRelExpr(RelExprContext ctx) {
-		LOG.debug("enterRelExpr: text = "+ctx.getText());
+		LOG.trace("enterRelExpr: text = "+ctx.getText());
 		
 		List<TerminalNode> opList = ctx.RELOP();
 		
@@ -218,7 +218,7 @@ public class SvcLogicExprListener extends ExprGrammarBaseListener
 		
 		for (TerminalNode nd : opList)
 		{
-			LOG.debug("enterRelExpr: operator - "+nd.getText());
+			LOG.trace("enterRelExpr: operator - "+nd.getText());
 			curBinExpr.addOperator(nd.getText());
 		}
 		
@@ -226,28 +226,28 @@ public class SvcLogicExprListener extends ExprGrammarBaseListener
 
 	@Override
 	public void exitRelExpr(RelExprContext ctx) {
-		LOG.debug("exitRelExpr: text = "+ctx.getText());
+		LOG.trace("exitRelExpr: text = "+ctx.getText());
 		
 		popExpr();
 	}
 
 	@Override
 	public void enterCompareExpr(CompareExprContext ctx) {
-		LOG.debug("enterCompareExpr: text = "+ctx.getText());
+		LOG.trace("enterCompareExpr: text = "+ctx.getText());
 		
 		TerminalNode nd = ctx.COMPAREOP();
 
 		SvcLogicBinaryExpression curBinExpr = new SvcLogicBinaryExpression();
 		pushExpr(curBinExpr);
 
-		LOG.debug("enterCompareExpr: operator - "+nd.getText());
+		LOG.trace("enterCompareExpr: operator - "+nd.getText());
 		curBinExpr.addOperator(nd.getText());
 
 	}
 
 	@Override
 	public void exitCompareExpr(CompareExprContext ctx) {
-		LOG.debug("exitCompareExpr : text = "+ctx.getText());
+		LOG.trace("exitCompareExpr : text = "+ctx.getText());
 		
 		popExpr();
 	}
@@ -256,18 +256,18 @@ public class SvcLogicExprListener extends ExprGrammarBaseListener
 	
 	@Override 
 	public void enterConstant(ConstantContext ctx) {
-		LOG.debug("enterConstant: text = "+ctx.getText());
+		LOG.trace("enterConstant: text = "+ctx.getText());
 	}
 
 	@Override
 	public void exitConstant(ConstantContext ctx) {
-		LOG.debug("exitConstant: text = "+ctx.getText());
+		LOG.trace("exitConstant: text = "+ctx.getText());
 	}
 
 
 	@Override
 	public void enterVariable(VariableContext ctx) {
-		LOG.debug("enterVariable: text = "+ctx.getText());
+		LOG.trace("enterVariable: text = "+ctx.getText());
 		
 		
 	}
@@ -290,12 +290,12 @@ public class SvcLogicExprListener extends ExprGrammarBaseListener
 	@Override
 	public void exitVariableLead(VariableLeadContext ctx) {
 
-		LOG.debug("exitVariableLead: text ="+ctx.getText());
+		LOG.trace("exitVariableLead: text ="+ctx.getText());
 	}
 
 	@Override
 	public void enterVariableTerm(VariableTermContext ctx) {
-		LOG.debug("enterVariableTerm: text ="+ctx.getText());
+		LOG.trace("enterVariableTerm: text ="+ctx.getText());
 		
 		String name = ctx.getText();
 		
@@ -310,7 +310,7 @@ public class SvcLogicExprListener extends ExprGrammarBaseListener
 
 	@Override
 	public void exitVariableTerm(VariableTermContext ctx) {
-		LOG.debug("exitVariableTerm: text="+ctx.getText());
+		LOG.trace("exitVariableTerm: text="+ctx.getText());
 		popExpr();
 	}
 }

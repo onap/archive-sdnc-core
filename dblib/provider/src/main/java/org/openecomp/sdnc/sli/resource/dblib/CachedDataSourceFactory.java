@@ -23,9 +23,8 @@ package org.openecomp.sdnc.sli.resource.dblib;
 
 import org.openecomp.sdnc.sli.resource.dblib.config.BaseDBConfiguration;
 import org.openecomp.sdnc.sli.resource.dblib.config.JDBCConfiguration;
-import org.openecomp.sdnc.sli.resource.dblib.config.JndiConfiguration;
+import org.openecomp.sdnc.sli.resource.dblib.jdbc.JdbcDBCachedDataSource;
 import org.openecomp.sdnc.sli.resource.dblib.jdbc.MySQLCachedDataSource;
-import org.openecomp.sdnc.sli.resource.dblib.jndi.JndiCachedDataSource;
 
 /**
  * @version $Revision: 1.1 $
@@ -38,9 +37,8 @@ public class CachedDataSourceFactory {
 
 	public static CachedDataSource createDataSource(BaseDBConfiguration config) {
 		if(config instanceof JDBCConfiguration)
-			return MySQLCachedDataSource.createInstance(config);
-		if(config instanceof JndiConfiguration)
-			return JndiCachedDataSource.createInstance(config);
+			return JdbcDBCachedDataSource.createInstance(config);
+
 		return (CachedDataSource)null;
 	}
 

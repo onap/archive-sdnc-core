@@ -1,0 +1,5 @@
+.git
+./dblib/provider/src/main/resources/dblib.properties:org.openecomp.sdnc.sli.jdbc.password=gamma
+./sli/common/src/test/resources/svclogic.properties:org.openecomp.sdnc.sli.jdbc.password = gamma
+./sli/provider/src/test/resources/svclogic.properties:org.openecomp.sdnc.sli.jdbc.password = gamma
+./sli/recording/src/main/resources/svclogic.properties:org.openecomp.sdnc.sli.jdbc.password = gamma
