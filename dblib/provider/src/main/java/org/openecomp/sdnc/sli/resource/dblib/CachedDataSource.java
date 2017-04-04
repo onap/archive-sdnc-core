@@ -20,12 +20,18 @@
 
 package org.openecomp.sdnc.sli.resource.dblib;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.sql.Blob;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Observer;
@@ -34,12 +40,14 @@ import javax.sql.DataSource;
 import javax.sql.rowset.CachedRowSet;
 import javax.sql.rowset.RowSetProvider;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.apache.tomcat.jdbc.pool.PoolExhaustedException;
 import org.openecomp.sdnc.sli.resource.dblib.config.BaseDBConfiguration;
 import org.openecomp.sdnc.sli.resource.dblib.pm.SQLExecutionMonitor;
 import org.openecomp.sdnc.sli.resource.dblib.pm.SQLExecutionMonitorObserver;
 import org.openecomp.sdnc.sli.resource.dblib.pm.SQLExecutionMonitor.TestObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException;
 
 
 /**
@@ -65,10 +73,14 @@ public abstract class CachedDataSource implements DataSource, SQLExecutionMonito
 	protected boolean initialized = false;
 
 	private long interval = 1000;
-	private long initisalDelay = 5000;
+	private long initialDelay = 5000;
 	private long expectedCompletionTime = 50L;
 	private boolean canTakeOffLine = true;
 	private long unprocessedFailoverThreshold = 3L;
+
+	private long nextErrorReportTime = 0L;
+
+	private String globalHostName = null;
 
 
 	public CachedDataSource(BaseDBConfiguration jdbcElem) throws DBConfigException
@@ -86,7 +98,7 @@ public abstract class CachedDataSource implements DataSource, SQLExecutionMonito
 		return ds.getConnection();
 	}
 
-	public CachedRowSet getData(String statement, ArrayList<String> arguments) throws SQLException, Throwable
+	public CachedRowSet getData(String statement, ArrayList<Object> arguments) throws SQLException, Throwable
 	{
 		TestObject testObject = null;
 		testObject = monitor.registerRequest();
@@ -99,7 +111,7 @@ public abstract class CachedDataSource implements DataSource, SQLExecutionMonito
 			}
 			if(LOGGER.isDebugEnabled())
 				LOGGER.debug("Obtained connection <" + connectionName + ">: "+connection.toString());
-			return executePreparedStatement(connection, statement, arguments);
+			return executePreparedStatement(connection, statement, arguments, true);
 		} finally {
 			try {
 				if(connection != null && !connection.isClosed()) {
@@ -115,7 +127,7 @@ public abstract class CachedDataSource implements DataSource, SQLExecutionMonito
 		}
 	}
 
-	public boolean writeData(String statement, ArrayList<String> arguments) throws SQLException, Throwable
+	public boolean writeData(String statement, ArrayList<Object> arguments) throws SQLException, Throwable
 	{
 		TestObject testObject = null;
 		testObject = monitor.registerRequest();
@@ -128,7 +140,7 @@ public abstract class CachedDataSource implements DataSource, SQLExecutionMonito
 			}
 			if(LOGGER.isDebugEnabled())
 				LOGGER.debug("Obtained connection <" + connectionName + ">: "+connection.toString());
-			return executeUpdatePreparedStatement(connection, statement, arguments);
+			return executeUpdatePreparedStatement(connection, statement, arguments, true);
 		} finally {
 			try {
 				if(connection != null && !connection.isClosed()) {
@@ -144,7 +156,8 @@ public abstract class CachedDataSource implements DataSource, SQLExecutionMonito
 		}
 	}
 
-	private CachedRowSet executePreparedStatement(Connection conn, String statement, ArrayList<String> arguments) throws SQLException, Throwable {
+	CachedRowSet executePreparedStatement(Connection conn, String statement, ArrayList<Object> arguments, boolean close) throws SQLException, Throwable
+	{
 		long time = System.currentTimeMillis();
 
 		CachedRowSet data = null;
@@ -202,7 +215,7 @@ public abstract class CachedDataSource implements DataSource, SQLExecutionMonito
 
 			}
 			try {
-				if(conn != null){
+				if(conn != null && close){
 					conn.close();
 					conn = null;
 				}
@@ -214,7 +227,7 @@ public abstract class CachedDataSource implements DataSource, SQLExecutionMonito
 		return data;
 	}
 
-	private boolean executeUpdatePreparedStatement(Connection conn, String statement, ArrayList<String> arguments) throws SQLException, Throwable {
+	boolean executeUpdatePreparedStatement(Connection conn, String statement, ArrayList<Object> arguments, boolean close) throws SQLException, Throwable {
 		long time = System.currentTimeMillis();
 
 		CachedRowSet data = null;
@@ -226,8 +239,20 @@ public abstract class CachedDataSource implements DataSource, SQLExecutionMonito
 			if(arguments != null)
 			{
 				for(int i = 0, max = arguments.size(); i < max; i++){
+					if(arguments.get(i) instanceof Blob) {
+						ps.setBlob(i+1, (Blob)arguments.get(i));
+					} else	if(arguments.get(i) instanceof Timestamp) {
+						ps.setTimestamp(i+1, (Timestamp)arguments.get(i));
+					} else	if(arguments.get(i) instanceof Integer) {
+						ps.setInt(i+1, (Integer)arguments.get(i));
+					} else	if(arguments.get(i) instanceof Long) {
+						ps.setLong(i+1, (Long)arguments.get(i));
+					} else	if(arguments.get(i) instanceof Date) {
+						ps.setDate(i+1, (Date)arguments.get(i));
+					} else {
 					ps.setObject(i+1, arguments.get(i));
 				}
+			}
 			}
 			rs = ps.executeUpdate();
 		    // Point the rowset Cursor to the start
@@ -256,9 +281,8 @@ public abstract class CachedDataSource implements DataSource, SQLExecutionMonito
 			}
 			throw exc; // new SQLException(exc);
 		} finally {
-
 			try {
-				if(conn != null){
+				if(conn != null && close){
 					conn.close();
 					conn = null;
 				}
@@ -321,6 +345,13 @@ public abstract class CachedDataSource implements DataSource, SQLExecutionMonito
 	}
 
 	public void cleanUp(){
+		if(ds != null && ds instanceof Closeable) {
+			try {
+				((Closeable)ds).close();
+			} catch (IOException e) {
+				LOGGER.warn(e.getMessage());
+			}
+		}
 		ds = null;
 		monitor.deleteObservers();
 		monitor.cleanup();
@@ -349,11 +380,10 @@ public abstract class CachedDataSource implements DataSource, SQLExecutionMonito
 			{
 				readOnly = rs.getBoolean(1);
 				hostname = rs.getString(2);
-//				if(rs.getInt(1)==1){
+
 					if(LOGGER.isDebugEnabled()){
 						LOGGER.debug("SQL DataSource <"+getDbConnectionName() + "> connected to " + hostname + ", read-only is " + readOnly + ", tested successfully ");
 					}
-//				}
 			}
 
 		} catch (Throwable exc) {
@@ -421,7 +451,7 @@ public abstract class CachedDataSource implements DataSource, SQLExecutionMonito
 	}
 
 	public long getInitialDelay() {
-		return initisalDelay;
+		return initialDelay;
 	}
 
 	public void setInterval(long value) {
@@ -429,7 +459,7 @@ public abstract class CachedDataSource implements DataSource, SQLExecutionMonito
 	}
 
 	public void setInitialDelay(long value) {
-		initisalDelay = value;
+		initialDelay = value;
 	}
 
 	public long getExpectedCompletionTime() {
@@ -477,29 +507,20 @@ public abstract class CachedDataSource implements DataSource, SQLExecutionMonito
 		return monitor;
 	}
 
-	protected boolean isSlave() {
+	protected boolean isSlave() throws PoolExhaustedException, MySQLNonTransientConnectionException {
 		CachedRowSet rs = null;
 		boolean isSlave = true;
 		String hostname = "UNDETERMINED";
 		try {
-//			rs = this.getData("show slave status", new ArrayList<String>());
-//			while(rs.next()) {
-//				String master = rs.getString(2);
-//				LOGGER.debug("database <"+connectionName+"> defines master as " + master);
-//				if(master == null || master.isEmpty() || master.equals(this.getDbConnectionName())) {
-//					isSlave = false;
-//				} else {
-//					isSlave = true;
-//				}
-//			}
-
 			boolean localSlave = true;
-			rs = this.getData("SELECT @@global.read_only, @@global.hostname", new ArrayList<String>());
+			rs = this.getData("SELECT @@global.read_only, @@global.hostname", new ArrayList<Object>());
 			while(rs.next()) {
 				localSlave = rs.getBoolean(1);
 				hostname = rs.getString(2);
 			}
 			isSlave = localSlave;
+		} catch(PoolExhaustedException | MySQLNonTransientConnectionException peexc){
+			throw peexc;
 		} catch (SQLException e) {
 			LOGGER.error("", e);
 			isSlave = true;
@@ -508,14 +529,88 @@ public abstract class CachedDataSource implements DataSource, SQLExecutionMonito
 			isSlave = true;
 		}
 		if(isSlave){
-			LOGGER.debug("SQL SLAVE : "+connectionName + " on server " + hostname);			
+			LOGGER.debug("SQL SLAVE : "+connectionName + " on server " + hostname);
 		} else {
-			LOGGER.debug("SQL MASTER : "+connectionName + " on server " + hostname);			
+			LOGGER.debug("SQL MASTER : "+connectionName + " on server " + hostname);
 		}
 		return isSlave;
 	}
-	
+
 	public boolean isFabric() {
 		return false;
+	}
+
+	protected boolean lockTable(Connection conn, String tableName) {
+		boolean retValue = false;
+		Statement lock = null;
+		try {
+			if(tableName != null) {
+				if(LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Executing 'LOCK TABLES " + tableName + " WRITE' on connection " + conn.toString());
+					if("SVC_LOGIC".equals(tableName)) {
+						Exception e = new Exception();
+						StringWriter sw = new StringWriter();
+						PrintWriter pw = new PrintWriter(sw);
+						e.printStackTrace(pw);
+						LOGGER.debug(sw.toString());
+					}
+				}
+				lock = conn.createStatement();
+				lock.execute("LOCK TABLES " + tableName + " WRITE");
+				retValue = true;
+			}
+		} catch(Exception exc){
+			LOGGER.error("", exc);
+			retValue =  false;
+		} finally {
+			try {
+				 lock.close();
+			} catch(Exception exc) {
+
+			}
+		}
+		return retValue;
+	}
+
+	protected boolean unlockTable(Connection conn) {
+		boolean retValue = false;
+		Statement lock = null;
+		try {
+			if(LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Executing 'UNLOCK TABLES' on connection " + conn.toString());
+			}
+			lock = conn.createStatement();
+			retValue = lock.execute("UNLOCK TABLES");
+		} catch(Exception exc){
+			LOGGER.error("", exc);
+			retValue =  false;
+		} finally {
+			try {
+				 lock.close();
+			} catch(Exception exc) {
+
+			}
+		}
+		return retValue;
+	}
+
+	public void getPoolInfo(boolean allocation) {
+
+	}
+
+	public long getNextErrorReportTime() {
+		return nextErrorReportTime;
+	}
+
+	public void setNextErrorReportTime(long nextTime) {
+		this.nextErrorReportTime = nextTime;
+	}
+
+	public void setGlobalHostName(String hostname) {
+		this.globalHostName  = hostname;
+	}
+
+	public String getGlobalHostName() {
+		return globalHostName;
 	}
 }

@@ -38,18 +38,22 @@ import java.util.PriorityQueue;
 import java.util.Properties;
 import java.util.Queue;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.sql.DataSource;
 import javax.sql.rowset.CachedRowSet;
 
+import org.apache.tomcat.jdbc.pool.PoolExhaustedException;
 import org.openecomp.sdnc.sli.resource.dblib.config.DbConfigPool;
 import org.openecomp.sdnc.sli.resource.dblib.factory.AbstractDBResourceManagerFactory;
 import org.openecomp.sdnc.sli.resource.dblib.factory.AbstractResourceManagerFactory;
 import org.openecomp.sdnc.sli.resource.dblib.factory.DBConfigFactory;
 import org.openecomp.sdnc.sli.resource.dblib.pm.PollingWorker;
 import org.openecomp.sdnc.sli.resource.dblib.pm.SQLExecutionMonitor;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -281,20 +285,21 @@ public class DBResourceManager implements DataSource, DataAccessor, DBResourceOb
 	}
 
 	/* (non-Javadoc)
-	 * @see org.openecomp.dblib.DataAccessor#getData(java.lang.String, java.util.ArrayList)
-	 */
-	/* (non-Javadoc)
 	 * @see org.openecomp.sdnc.sli.resource.dblib.DbLibService#getData(java.lang.String, java.util.ArrayList, java.lang.String)
 	 */
 	@Override
 	public CachedRowSet getData(String statement, ArrayList<String> arguments, String preferredDS) throws SQLException {
+		ArrayList<Object> newList=new ArrayList<Object>();
+		if(arguments != null && !arguments.isEmpty()) {
+			newList.addAll(arguments);
+		}
 		if(recoveryMode)
-			return requestDataWithRecovery(statement, arguments, preferredDS);
+			return requestDataWithRecovery(statement, newList, preferredDS);
 		else
-			return requestDataNoRecovery(statement, arguments, preferredDS);
+			return requestDataNoRecovery(statement, newList, preferredDS);
 	}
 
-	private CachedRowSet requestDataWithRecovery(String statement, ArrayList<String> arguments, String preferredDS) throws SQLException {
+	private CachedRowSet requestDataWithRecovery(String statement, ArrayList<Object> arguments, String preferredDS) throws SQLException {
 		Throwable lastException = null;
 		CachedDataSource active = null;
 
@@ -346,7 +351,7 @@ public class DBResourceManager implements DataSource, DataAccessor, DBResourceOb
 			} finally {
 				if(LOGGER.isDebugEnabled()){
 					time = (System.currentTimeMillis() - time);
-					LOGGER.debug(">> getData : "+ active.getDbConnectionName()+"  "+time+" miliseconds.");
+					LOGGER.debug("getData processing time : "+ active.getDbConnectionName()+"  "+time+" miliseconds.");
 				}
 			}
 		}
@@ -369,7 +374,7 @@ public class DBResourceManager implements DataSource, DataAccessor, DBResourceOb
 		}
 	}
 
-	private CachedRowSet requestDataNoRecovery(String statement, ArrayList<String> arguments, String preferredDS) throws SQLException {
+	private CachedRowSet requestDataNoRecovery(String statement, ArrayList<Object> arguments, String preferredDS) throws SQLException {
 		if(dsQueue.isEmpty()){
 			LOGGER.error("Generated alarm: DBResourceManager.getData - No active DB connection pools are available.");
 			throw new DBLibException("No active DB connection pools are available in RequestDataNoRecovery call.");
@@ -407,17 +412,20 @@ public class DBResourceManager implements DataSource, DataAccessor, DBResourceOb
 
 
 	/* (non-Javadoc)
-	 * @see org.openecomp.dblib.DataAccessor#writeData(java.lang.String, java.util.ArrayList)
-	 */
-	/* (non-Javadoc)
 	 * @see org.openecomp.sdnc.sli.resource.dblib.DbLibService#writeData(java.lang.String, java.util.ArrayList, java.lang.String)
 	 */
 	@Override
-	public boolean writeData(String statement, ArrayList<String> arguments, String preferredDS) throws SQLException {
-		return writeDataNoRecovery(statement, arguments, preferredDS);
+	public boolean writeData(String statement, ArrayList<String> arguments, String preferredDS) throws SQLException
+        {
+		ArrayList<Object> newList=new ArrayList<Object>();
+		if(arguments != null && !arguments.isEmpty()) {
+			newList.addAll(arguments);
+		}
+
+		return writeDataNoRecovery(statement, newList, preferredDS);
 	}
 
-	CachedDataSource findMaster() {
+	CachedDataSource findMaster() throws PoolExhaustedException, MySQLNonTransientConnectionException {
 		CachedDataSource master = null;
 		CachedDataSource[] dss = this.dsQueue.toArray(new CachedDataSource[0]);
 		for(int i=0; i<dss.length; i++) {
@@ -437,7 +445,7 @@ public class DBResourceManager implements DataSource, DataAccessor, DBResourceOb
 	}
 
 
-	private boolean writeDataNoRecovery(String statement, ArrayList<String> arguments, String preferredDS) throws SQLException {
+	private boolean writeDataNoRecovery(String statement, ArrayList<Object> arguments, String preferredDS) throws SQLException {
 		if(dsQueue.isEmpty()){
 			LOGGER.error("Generated alarm: DBResourceManager.getData - No active DB connection pools are available.");
 			throw new DBLibException("No active DB connection pools are available in RequestDataNoRecovery call.");
@@ -485,7 +493,7 @@ public class DBResourceManager implements DataSource, DataAccessor, DBResourceOb
 			} finally {
 				if(LOGGER.isDebugEnabled()){
 					time = (System.currentTimeMillis() - time);
-					LOGGER.debug(">> getData : "+ active.getDbConnectionName()+"  "+time+" miliseconds.");
+					LOGGER.debug("writeData processing time : "+ active.getDbConnectionName()+"  "+time+" miliseconds.");
 				}
 			}
 		}
@@ -514,19 +522,25 @@ public class DBResourceManager implements DataSource, DataAccessor, DBResourceOb
 			if(tmpActive != null) {
 				active = tmpActive;
 			}
-			return active.getConnection();
+			return new DBLibConnection(active.getConnection(), active);
 		} catch(javax.sql.rowset.spi.SyncFactoryException exc){
 			LOGGER.debug("Free memory (bytes): " + Runtime.getRuntime().freeMemory());
 			LOGGER.warn("CLASSPATH issue. Allowing retry", exc);
 			lastException = exc;
+		} catch(PoolExhaustedException exc) {
+			throw new NoAvailableConnectionsException(exc);
+		} catch(MySQLNonTransientConnectionException exc){
+			throw new NoAvailableConnectionsException(exc);
 		} catch(Exception exc){
 			lastException = exc;
 			if(recoveryMode){
 				handleGetConnectionException(active, exc);
 			} else {
-				if(exc instanceof SQLException)
+				if(exc instanceof MySQLNonTransientConnectionException) {
+					throw new NoAvailableConnectionsException(exc);
+				} if(exc instanceof SQLException) {
 					throw (SQLException)exc;
-				else {
+				} else {
 					DBLibException excptn = new DBLibException(exc.getMessage());
 					excptn.setStackTrace(exc.getStackTrace());
 					throw excptn;
@@ -779,7 +793,7 @@ public class DBResourceManager implements DataSource, DataAccessor, DBResourceOb
 		return "";
 	}
 
-	private String getPreferredDataSourceName(AtomicBoolean flipper) {
+	public String getPreferredDataSourceName(AtomicBoolean flipper) {
 
 		LinkedList<CachedDataSource> snapshot = new LinkedList<CachedDataSource>(dsQueue);
 		if(snapshot.size() > 1){
@@ -839,90 +853,11 @@ public class DBResourceManager implements DataSource, DataAccessor, DBResourceOb
 		return snapshot.peek().getDbConnectionName();
 	}
 
-	/*
-	private void runTest(){
-		Thread producer = null;
-
-		producer = new ProducerThread("Prod1");
-		producer.setDaemon(true);
-		producer.start();
-
-		producer = new ProducerThread("Prod2");
-		producer.setDaemon(true);
-		producer.start();
-
-		producer = new ProducerThread("Prod3");
-		producer.setDaemon(true);
-		producer.start();
-
-		producer = new ProducerThread("Prod4");
-		producer.setDaemon(true);
-		producer.start();
-
-		producer = new ProducerThread("Prod5");
-		producer.setDaemon(true);
-		producer.start();
-
-		producer = new ProducerThread("Prod6");
-		producer.setDaemon(true);
-		producer.start();
-
-		producer = new ProducerThread("Prod7");
-		producer.setDaemon(true);
-		producer.start();
-
-		producer = new ProducerThread("Prod8");
-		producer.setDaemon(true);
-		producer.start();
-
-		producer = new ProducerThread("Prod9");
-		producer.setDaemon(true);
-		producer.start();
-
-		producer = new ProducerThread("Pro10");
-		producer.setDaemon(true);
-		producer.start();
-
-	}
-
-	private final class ProducerThread extends Thread {
-		private ProducerThread(String threadName) {
-			super(threadName);
-		}
-
-		public void run()
-		{
-			String name = null;
-			for(int i=0; i<(Integer.MAX_VALUE-1); i++)
-			{
-					try {
-						name = getPreferredDataSourceName(dsSelector);
-						if(name.contains("BACK")){
-							LOGGER.error(this.getName()+": <======      ");
-						} else {
-							LOGGER.error(this.getName()+":       ======>");
-						}
-						CachedRowSet rs = null;
-						rs = getData("select 1 from dual", new ArrayList<String>(), name);
-						rs.close();
-						rs = getData("select 1 from dual", new ArrayList<String>(), name);
-						rs.close();
-						rs = getData("select 1 from dual", new ArrayList<String>(), name);
-						rs.close();
-						rs = getData("select 1 from dual", new ArrayList<String>(), name);
-						rs.close();
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-
-				try {
-					Thread.sleep(50L);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-			return;
-		}
-	}
-*/
+    class RemindTask extends TimerTask {
+        public void run() {
+			CachedDataSource ds = dsQueue.peek();
+			if(ds != null)
+				ds.getPoolInfo(false);
+        }
+    }
 }

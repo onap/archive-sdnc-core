@@ -26,6 +26,7 @@ import java.util.Properties;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -104,6 +105,23 @@ public class DBLIBResourceActivator implements BundleActivator {
 		LOG.info("entering DBLIBResourceActivator.stop");
 		if (registration != null)
 		{
+			try {
+				ServiceReference sref = ctx.getServiceReference(DbLibService.class.getName());
+
+				if (sref == null) {
+					LOG.warn("Could not find service reference for DBLIB service ("	+ DbLibService.class.getName() + ")");
+				} else {
+					DBResourceManager dblibSvc = (DBResourceManager) ctx.getService(sref);
+					if (dblibSvc == null) {
+						LOG.warn("Could not find service reference for DBLIB service ("	+ DbLibService.class.getName() + ")");
+					} else {
+						dblibSvc.cleanUp();
+					}
+				}
+			} catch(Throwable exc) {
+				LOG.warn("Cleanup", exc);
+			}
+
 			registration.unregister();
 			registration = null;
 			LOG.debug("Deregistering DBResourceManager service");

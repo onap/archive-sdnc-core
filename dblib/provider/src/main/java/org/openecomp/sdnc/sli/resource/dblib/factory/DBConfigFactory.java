@@ -45,7 +45,6 @@ public class DBConfigFactory {
 	}
 
 	static DbConfigPool getConfigparams(Properties properties){
-		LoggerFactory.getLogger(DBConfigFactory.class).info(properties.toString());
 		DbConfigPool xmlConfig = new DbConfigPool(properties);
 		ArrayList<Properties> propertySets = new ArrayList<Properties>();
 
