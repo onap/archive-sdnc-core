@@ -486,8 +486,8 @@
 
 	<distributionManagement>
 		<site>
-			<id>sdnc-javadoc</id>
-			<url>dav:https://ecomp-nexus:${openecomp.nexus.port}/repository/sdn-c-javadoc/${project.version}</url>
+			<id>ecomp-site</id>
+			<url>dav:https://${openecomp.nexus.host}/content/sites/site/org/onap/sdnc/${project.version}</url>
 		</site>
 		<repository>
 			<id>ecomp-releases</id>
