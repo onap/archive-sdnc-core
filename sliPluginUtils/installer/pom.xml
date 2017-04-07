@@ -60,6 +60,7 @@
 							<descriptors>
 								<descriptor>src/assembly/assemble_mvnrepo_zip.xml</descriptor>
 							</descriptors>
+							<appendAssemblyId>false</appendAssemblyId>
 						</configuration>
 					</execution>
 					<execution>
@@ -74,6 +75,7 @@
 							<descriptors>
 								<descriptor>src/assembly/assemble_installer_zip.xml</descriptor>
 							</descriptors>
+							<appendAssemblyId>false</appendAssemblyId>
 						</configuration>
 					</execution>
 				</executions>
