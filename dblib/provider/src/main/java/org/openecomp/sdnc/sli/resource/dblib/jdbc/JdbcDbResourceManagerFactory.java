@@ -55,11 +55,11 @@ public class JdbcDbResourceManagerFactory extends AbstractResourceManagerFactory
 
 	}
 
-	class MyFutureTask extends FutureTask<DBInitTask>
+	class MyFutureTask extends FutureTask<CachedDataSource>
 	{
 
 		public MyFutureTask(Callable<CachedDataSource> result) {
-			super((Callable)result);
+			super(result);
 		}
 
 	}
@@ -87,7 +87,7 @@ public class JdbcDbResourceManagerFactory extends AbstractResourceManagerFactory
 		// here create the data sources objects
 		JDBCConfiguration[] list = dbConfig.getJDBCbSourceArray();
 
-		FutureTask<DBInitTask>[] futures = new MyFutureTask[list.length];
+		MyFutureTask[] futures = new MyFutureTask[list.length];
 		final Set<DBInitTask> tasks = new HashSet<DBInitTask>();
 		if(LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Creating " + list.length + " datasources.");
