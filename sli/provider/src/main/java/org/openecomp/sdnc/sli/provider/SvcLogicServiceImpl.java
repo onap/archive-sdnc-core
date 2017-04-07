@@ -257,28 +257,12 @@ public class SvcLogicServiceImpl implements SvcLogicService {
 
 		}
 		
-		if (nodeExecutors == null) {
-			LOG.info("Start: registering node executors");
-			registerExecutors();
-
-			LOG.info("Done: registering node executors");
-		}
-		
-		LOG.info("About to execute graph " + graph.toString());
-
-		LOG.info("Executing root node");
 		SvcLogicContext ctx = new SvcLogicContext(props);
         ctx.setAttribute("currentGraph", graph.toString());
         ctx.setAttribute("X-ECOMP-RequestID", MDC.get("X-ECOMP-RequestID"));
 		ctx.setDomDataBroker(domDataBroker);
-		SvcLogicNode curNode = graph.getRootNode();
-
-		while (curNode != null) {
-			LOG.info("About to execute node # "+curNode.getNodeId()+" ("+curNode.getNodeType()+")");
-			SvcLogicNode nextNode = executeNode(curNode, ctx);
-			curNode = nextNode;
-		}
 		
+		execute(graph, ctx);
 
 		return(ctx.toProperties());
 	}
