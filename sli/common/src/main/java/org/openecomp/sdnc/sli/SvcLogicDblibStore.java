@@ -189,8 +189,10 @@ public class SvcLogicDblibStore implements SvcLogicStore {
 			} else {
 				return (null);
 			}
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			throw new ConfigurationException("SQL query failed", e);
+		} catch (Exception e) {
+			throw new ConfigurationException("Graph processing failed", e);
 		} finally {
 			if (results != null) {
 				try {
