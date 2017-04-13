@@ -102,40 +102,48 @@ public class SvcLogicBinaryExpression extends SvcLogicExpression {
 			sbuff.append(" ");
 			sbuff.append(operators.get(i));
 			sbuff.append(" ");
-			sbuff.append(operands.get(i+1).toString());
+			if (i + 1 < operands.size()) {
+				sbuff.append(operands.get(i + 1).toString());
+			} else {
+				// expression incomplete; operand not bound yet
+				sbuff.append("?");
+			}
 		}
 		
 		return(sbuff.toString());
 
 	}
 	
-	public String asParsedExpr()
-	{
-		
-		List<SvcLogicExpression>operands = getOperands();
-		StringBuffer sbuff = new StringBuffer();
-		StringBuffer closeParens = new StringBuffer();
-		int i = 0;
-		for (OperatorType operator : operators)
-		{
-			sbuff.append("(");
-			sbuff.append(operator.getText());
-			sbuff.append(" ");
-			sbuff.append(operands.get(i++).asParsedExpr());
-			closeParens.append(")");
+	public String asParsedExpr() {
+
+		List<SvcLogicExpression> operands = getOperands();
+
+		if (operators.isEmpty()) {
+			return operands.get(0).asParsedExpr();
+		} else {
+			StringBuffer sbuff = new StringBuffer();
+			// operators in reverse order for left associativity
+			for (int i = operators.size() - 1; i >= 0; --i) {
+				sbuff.append("(");
+				sbuff.append(operators.get(i).getText());
+				sbuff.append(" ");
+			}
+			for (int i = 0; i < operators.size() + 1; ++i) {
+				if (i < operands.size()) {
+					sbuff.append(operands.get(i).asParsedExpr());
+				} else {
+					// expression incomplete; operand not bound yet
+					sbuff.append("?");
+				}
+				if (i != 0) {
+					sbuff.append(")");
+				}
+				if (i < operators.size()) {
+					sbuff.append(" ");
+				}
+			}
+			return sbuff.toString();
 		}
-		sbuff.append(" ");
-		if (i < operands.size())
-		{
-			sbuff.append(operands.get(i).asParsedExpr());
-		}
-		else
-		{
-			sbuff.append("__MISSING_OPERAND__");
-		}
-		sbuff.append(closeParens.toString());
-		return(sbuff.toString());
-		
 	}
 
 }

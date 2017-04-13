@@ -137,6 +137,11 @@ public class SvcLogicAtom extends SvcLogicExpression {
 	
 	public String asParsedExpr()
 	{
+		// simplify debugging output for NUMBER type
+		if (atomType == AtomType.NUMBER) {
+			return atom;
+		}
+
 		StringBuffer sbuff = new StringBuffer();
 		
 		sbuff.append("(atom");

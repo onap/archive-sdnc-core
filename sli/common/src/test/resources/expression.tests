@@ -13,3 +13,7 @@ length($network_segment[0].provider-physical-network) >= 5
 substr($network_segment[0].provider-physical-network,0,5) == 'dvspg'
 length($network_segment[0].provider-physical-network) >= 5 and substr($network_segment[0].provider-physical-network,0,5) == 'dvspg'
 (length($network_segment[0].provider-physical-network) >= 5) and (substr($network_segment[0].provider-physical-network,0,5) == 'dvspg')
+4-2-2
+1+1
+1
+1+2*3-4
