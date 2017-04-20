@@ -35,6 +35,7 @@ import org.openecomp.sdnc.sli.provider.SvcLogicExpressionResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import junit.framework.Assert;
 import junit.framework.TestCase;
 
 public class SvcLogicExpressionResolverTest extends TestCase {
@@ -50,21 +51,22 @@ public class SvcLogicExpressionResolverTest extends TestCase {
 		
 		try
 		{
-			String testExpr = null;
 			SvcLogicContext ctx = new SvcLogicContext();
 			SvcLogicGraph graph = new SvcLogicGraph();
 			SvcLogicNode node = new SvcLogicNode(1, "return", graph);
 			graph.setRootNode(node);
-			
-			while ((testExpr = testsReader.readLine()) != null) {
-				testExpr = testExpr.trim();
-				if (testExpr.startsWith("#"))
+
+			String line = null;
+			int lineNo = 0;
+			while ((line = testsReader.readLine()) != null) {
+				++lineNo;
+				if (line.startsWith("#"))
 				{
-					testExpr = testExpr.substring(1).trim();
+					String testExpr = line.trim().substring(1).trim();
 					String[] nameValue = testExpr.split("=");
 					String name = nameValue[0].trim();
 					String value = nameValue[1].trim();
-					
+
 					if (name.startsWith("$"))
 					{
 						LOG.info("Setting context attribute "+name+" = "+value);
@@ -80,6 +82,12 @@ public class SvcLogicExpressionResolverTest extends TestCase {
 				}
 				else
 				{
+					// if the line contains #, what comes before is the expression to evaluate, and what comes after
+					// is the expected value
+					String[] substrings = line.split("#");
+					String expectedValue = substrings.length > 1 ? substrings[1].trim() : null;
+					String testExpr = substrings[0].trim();
+
 					LOG.info("Parsing expression "+testExpr);
 					SvcLogicExpression expr = SvcLogicExpressionFactory.parse(testExpr);
 					if (expr == null)
@@ -96,7 +104,10 @@ public class SvcLogicExpressionResolverTest extends TestCase {
 						}
 						else
 						{
-							LOG.info("Expression "+testExpr+" evaluates to "+exprValue);
+							LOG.info("Expression " + testExpr + " evaluates to " + exprValue);
+							if (expectedValue != null) {
+								Assert.assertEquals("Line " + lineNo + ": " + testExpr, expectedValue, exprValue);
+							}
 						}
 					}
 				}
