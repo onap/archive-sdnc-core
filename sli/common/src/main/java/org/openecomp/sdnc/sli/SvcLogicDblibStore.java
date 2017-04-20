@@ -50,14 +50,14 @@ import org.slf4j.LoggerFactory;
 public class SvcLogicDblibStore implements SvcLogicStore {
 
 	private static final String SDNC_CONFIG_DIR = "SDNC_CONFIG_DIR";
-	
+
 	private static final Logger LOG = LoggerFactory
 			.getLogger(SvcLogicDblibStore.class);
 
 	private static final String DBLIB_SERVICE =
 	// "org.openecomp.sdnc.sli.resource.dblib.DBLibService";
 	"org.openecomp.sdnc.sli.resource.dblib.DBResourceManager";
-	
+
 	Properties props = null;
 
 	public void init(Properties props) throws ConfigurationException {
@@ -148,7 +148,7 @@ public class SvcLogicDblibStore implements SvcLogicStore {
 		try {
 			dbConn = ((DBResourceManager) dbSvc).getConnection();
 			PreparedStatement fetchGraphStmt;
-			
+
 			ArrayList<String> args = new ArrayList<String>();
 			args.add(module);
 			args.add(rpc);
@@ -159,7 +159,7 @@ public class SvcLogicDblibStore implements SvcLogicStore {
 			} else {
 				fetchGraphStmt = dbConn.prepareStatement(fetchVersionGraphSql);
 			}
-			
+
 			fetchGraphStmt.setString(1, module);
 			fetchGraphStmt.setString(2,  rpc);
 			fetchGraphStmt.setString(3, mode);
@@ -168,7 +168,7 @@ public class SvcLogicDblibStore implements SvcLogicStore {
 			}
 
 			results = fetchGraphStmt.executeQuery();
-			
+
 			if (results.next()) {
 				Blob graphBlob = results.getBlob("graph");
 
@@ -442,12 +442,12 @@ public class SvcLogicDblibStore implements SvcLogicStore {
 		DbLibService dblibSvc = null;
 		ServiceReference sref = null;
 		BundleContext bctx = null;
-	
+
 		Bundle bundle = FrameworkUtil.getBundle(SvcLogicDblibStore.class);
-		
+
 		if (bundle != null) {
 			bctx = bundle.getBundleContext();
-			
+
 			if (bctx != null) {
 				sref = bctx.getServiceReference(DBLIB_SERVICE);
 			}
@@ -458,7 +458,7 @@ public class SvcLogicDblibStore implements SvcLogicStore {
 			} else {
 				dblibSvc = (DbLibService) bctx.getService(sref);
 				if (dblibSvc == null) {
-					
+
 					LOG.warn("Could not find service reference for DBLIB service ("
 							+ DBLIB_SERVICE + ")");
 				}
@@ -470,34 +470,34 @@ public class SvcLogicDblibStore implements SvcLogicStore {
 			// Try to create a DbLibService object from dblib properties
 			if(JavaSingleton.getInstance() == null){
 				Properties dblibProps = new Properties();
-				
+
 				String propDir = System.getenv(SDNC_CONFIG_DIR);
 				if (propDir == null) {
-					
+
 					propDir = "/opt/sdnc/data/properties";
 				}
 				String propPath = propDir + "/dblib.properties";
-				
+
 				File propFile = new File(propPath);
-				
+
 				if (!propFile.exists()) {
-					
+
 					LOG.warn(
 							"Missing configuration properties file : "
 									+ propFile);
 					return(null);
 				}
-				
+
 				try {
-					
+
 					dblibProps.load(new FileInputStream(propFile));
 				} catch (Exception e) {
 					LOG.warn(
 							"Could not load properties file " + propPath, e);
 					return(null);
-					
+
 				}
-				
+
 				try {
 					dblibSvc = DBResourceManager.create(dblibProps);
 					JavaSingleton.setInstance(dblibSvc);
@@ -511,7 +511,7 @@ public class SvcLogicDblibStore implements SvcLogicStore {
 		return (dblibSvc);
 	}
 
-	
+
 	static class JavaSingleton {
 	     /* Private constructor     */
 	     private JavaSingleton() {
@@ -525,7 +525,7 @@ public class SvcLogicDblibStore implements SvcLogicStore {
 	     public static DbLibService getInstance() {
 	        return INSTANCE;
 	     }
-	     
+
 	     public static void setInstance(DbLibService dbresource) {
 		        INSTANCE = dbresource;
 		     }

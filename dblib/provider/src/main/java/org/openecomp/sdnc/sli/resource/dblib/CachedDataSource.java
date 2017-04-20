@@ -182,7 +182,7 @@ public abstract class CachedDataSource implements DataSource, SQLExecutionMonito
 			data.populate(rs);
 		    // Point the rowset Cursor to the start
 			if(LOGGER.isDebugEnabled()){
-				LOGGER.debug("SQL SUCCESS. count=" + data.size()+ ", time(ms): "+ (System.currentTimeMillis() - time));			}
+				LOGGER.debug("SQL SUCCESS. rows returned: " + data.size()+ ", time(ms): "+ (System.currentTimeMillis() - time));			}
 		} catch(SQLException exc){
 			if(LOGGER.isDebugEnabled()){
 				LOGGER.debug("SQL FAILURE. time(ms): "+ (System.currentTimeMillis() - time));
@@ -257,7 +257,7 @@ public abstract class CachedDataSource implements DataSource, SQLExecutionMonito
 			rs = ps.executeUpdate();
 		    // Point the rowset Cursor to the start
 			if(LOGGER.isDebugEnabled()){
-				LOGGER.debug("SQL SUCCESS. count=" + data.size()+ ", time(ms): "+ (System.currentTimeMillis() - time));
+				LOGGER.debug("SQL SUCCESS. rows returned: " + data.size()+ ", time(ms): "+ (System.currentTimeMillis() - time));
 			}
 		} catch(SQLException exc){
 			if(LOGGER.isDebugEnabled()){

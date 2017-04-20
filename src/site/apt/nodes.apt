@@ -187,10 +187,12 @@ Supported node types
 *** Example
 
 +-------------------+
-<for index="i" start="0" end="$network.num-segments">
-  <set>
-    <parameter name="$vlanlist" value="eval($vlanlist+','+$network.segment[i].provider-segmentation-id)"/>
-  </set>
+<for index="i" start="0" end="`$service-data.universal-cpe-ft.l2-switch-interfaces_length`">
+   <record plugin="org.openecomp.sdnc.sli.recording.Slf4jRecorder">
+      <parameter name="logger" value="message-log"/>
+      <parameter name="level" value="info"/>
+      <parameter name="field1" value="`'current l2-switch-interface name is ' + $service-data.universal-cpe-ft.l2-switch-interfaces[$i].name`"/>
+   </record>
 </for>
 +-------------------+
 

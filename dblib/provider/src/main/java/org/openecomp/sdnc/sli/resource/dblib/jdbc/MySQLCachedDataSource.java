@@ -59,9 +59,6 @@ public class MySQLCachedDataSource extends CachedDataSource
 
 	/**
 	 * @param jdbcElem
-	 * @param alarmLog 
-	 * @param occManager 
-	 * @throws Exception 
 	 */
 	public MySQLCachedDataSource(BaseDBConfiguration jdbcElem)
 	{

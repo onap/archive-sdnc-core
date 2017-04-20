@@ -123,12 +123,12 @@
 		<dependency>
 			<groupId>org.openecomp.sdnc.core</groupId>
 			<artifactId>sli-common</artifactId>
-			<version>${sdnctl.sli.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openecomp.sdnc.core</groupId>
 			<artifactId>sli-provider</artifactId>
-			<version>${sdnctl.sli.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.opendaylight.controller</groupId>
