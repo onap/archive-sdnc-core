@@ -171,7 +171,6 @@
 
 	</build>
 	<modules>
-		<module>rootpom</module>
 		<module>dblib</module>
 		<module>sli</module>
 		<module>filters</module>
