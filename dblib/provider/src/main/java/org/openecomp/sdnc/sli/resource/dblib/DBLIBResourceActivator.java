@@ -96,7 +96,6 @@ public class DBLIBResourceActivator implements BundleActivator {
 		String regName = jdbcDataSource.getClass().getName();
 
 		LOG.info("Registering DBResourceManager service "+regName);
-//		registration = ctx.registerService(regName, jdbcDataSource, null);
 		registration = ctx.registerService(new String[] { regName, DbLibService.class.getName(), "javax.sql.DataSource" }, jdbcDataSource, null);
 	}
 

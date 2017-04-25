@@ -818,7 +818,6 @@ public class DBResourceManager implements DataSource, DataAccessor, DBResourceOb
 
 	public java.util.logging.Logger getParentLogger()
 			throws SQLFeatureNotSupportedException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

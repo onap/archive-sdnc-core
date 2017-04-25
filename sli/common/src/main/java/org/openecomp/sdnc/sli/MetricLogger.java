@@ -54,6 +54,8 @@ public class MetricLogger {
     public static final String STATUS_CODE = "X-ECOMP-StatusCode";
     public static final String RESPONSE_CODE = "X-ECOMP-ResponseCode";
     public static final String RESPONSE_DESCRIPTION = "X-ECOMP-ResponseDescription";
+    public static final String INSTANCE_UUID = "X-ECOMP-InstanceUUID";
+    public static final String CATEGORY_LOG_LEVEL = "X-ECOMP-CategoryLogLevel";
     public static final String SEVERITY = "X-ECOMP-Severity";
     public static final String SERVER_IP_ADDRESS = "X-ECOMP-ServerIpAddress";
     public static final String ELAPSED_TIME = "X-ECOMP-ElapsedTime";
@@ -170,6 +172,22 @@ public class MetricLogger {
         MDC.put(RESPONSE_DESCRIPTION, responseDesc);
     }
 
+    public String getInstanceUUID() {
+	return MDC.get(INSTANCE_UUID);
+    }
+
+    private void setInstanceUUID(String instanceUUID) {
+	MDC.put(INSTANCE_UUID, instanceUUID);
+    }
+
+    public String getCategoryLogLevel() {
+	return MDC.get(CATEGORY_LOG_LEVEL);
+    }
+
+    private void setCategoryLogLevel(String categoryLogLevel) {
+	MDC.put(CATEGORY_LOG_LEVEL, categoryLogLevel);
+    }
+    
     public String getSeverity() {
         return MDC.get(SEVERITY);
     }
