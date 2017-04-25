@@ -6,7 +6,6 @@
 		<groupId>org.opendaylight.odlparent</groupId>
 		<artifactId>odlparent</artifactId>
 		<version>1.7.1-Boron-SR1</version>
-		<relativePath>../../../../../opendaylight/odlparent</relativePath>
 	</parent>
 
 
