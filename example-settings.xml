@@ -18,7 +18,7 @@
         <repository>
           <id>openecomp-release</id>
           <name>openecomp-release</name>
-          <url>https://ecomp-nexus:8443/repository/maven-releases/</url>
+          <url>https://nexus.onap.org/content/repositories/releases/</url>
           <releases>
             <enabled>true</enabled>
             <updatePolicy>never</updatePolicy>
@@ -32,7 +32,7 @@
         <pluginRepository>
           <id>openecomp-release</id>
           <name>openecomp-release</name>
-          <url>https://ecomp-nexus:8443/repository/maven-releases/</url>
+          <url>https://nexus.onap.org/content/repositories/releases/</url>
           <releases>
             <enabled>true</enabled>
             <updatePolicy>never</updatePolicy>
@@ -50,7 +50,7 @@
         <repository>
           <id>openecomp-snapshot</id>
           <name>openecomp-snapshot</name>
-          <url>https://ecomp-nexus:8443/repository/maven-snapshots/</url>
+          <url>https://nexus.onap.org/content/repositories/snapshots/</url>
           <releases>
             <enabled>false</enabled>
           </releases>
@@ -63,7 +63,7 @@
         <pluginRepository>
           <id>openecomp-snapshot</id>
           <name>openecomp-snapshot</name>
-          <url>https://ecomp-nexus:8443/repository/maven-snapshots/</url>
+          <url>https://nexus.onap.org/content/repositories/snapshots/</url>
           <releases>
             <enabled>false</enabled>
           </releases>
