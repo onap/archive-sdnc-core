@@ -485,10 +485,6 @@
 		</repositories>
 
 		<distributionManagement>
-			<site>
-				<id>ecomp-site</id>
-				<url>dav:https://${openecomp.nexus.host}/content/sites/site/org/onap/sdnc/${project.version}</url>
-			</site>
 			<repository>
 				<id>ecomp-releases</id>
 				<name>openecomp-repository-releases</name>
