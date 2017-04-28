@@ -8,9 +8,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -212,7 +212,7 @@ public class RequestResponseDbLoggingFilter implements Filter {
 
 		} finally {
 
-			if (request != null && request instanceof HttpServletRequest) {
+			if (request instanceof HttpServletRequest) {
 
 				t1 = System.currentTimeMillis();
 
@@ -243,55 +243,22 @@ public class RequestResponseDbLoggingFilter implements Filter {
 
 	private String decompressGZIPByteArray(byte[] bytes) {
 
-		BufferedReader in = null;
-		InputStreamReader inR = null;
-		ByteArrayInputStream byteS = null;
-		GZIPInputStream gzS = null;
 		StringBuilder str = new StringBuilder();
-		try {
-			byteS = new ByteArrayInputStream(bytes);
-			gzS = new GZIPInputStream(byteS);
-			inR = new InputStreamReader(gzS);
-			in = new BufferedReader(inR);
+		try (ByteArrayInputStream byteS = new ByteArrayInputStream(bytes);
+				GZIPInputStream gzS = new GZIPInputStream(byteS);
+				InputStreamReader inR = new InputStreamReader(gzS);
+				BufferedReader in = new BufferedReader(inR);) {
 
-			if (in != null) {
+			String content;
 
-				String content;
-
-				while ((content = in.readLine()) != null) {
-					str.append(content);
-				}
+			while ((content = in.readLine()) != null) {
+				str.append(content);
 			}
 
 		} catch (Exception e) {
 			log.error("Failed get read GZIPInputStream", e);
-		} finally {
-
-			if (byteS != null)
-				try {
-					byteS.close();
-				} catch (IOException e1) {
-					log.error("Failed to close ByteStream", e1);
-				}
-			if (gzS != null)
-				try {
-					gzS.close();
-				} catch (IOException e2) {
-					log.error("Failed to close GZStream", e2);
-				}
-			if (inR != null)
-				try {
-					inR.close();
-				} catch (IOException e3) {
-					log.error("Failed to close InputReader", e3);
-				}
-			if (in != null)
-				try {
-					in.close();
-				} catch (IOException e) {
-					log.error("Failed to close BufferedReader", e);
-				}
 		}
+
 		return str.toString();
 	}
 }

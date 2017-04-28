@@ -8,9 +8,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -659,7 +659,7 @@ public class SliPluginUtils implements SvcLogicJavaPlugin {
      * @throws SvcLogicException thrown if file cannot be created or if parameters are missing
      */
 	public static void printContext(Map<String, String> parameters, SvcLogicContext ctx) throws SvcLogicException {
-		if (parameters == null || parameters.keySet().size() < 1) {
+		if (parameters == null || parameters.isEmpty()) {
 			throw new SvcLogicException("no parameters passed");
 		}
 
@@ -667,19 +667,19 @@ public class SliPluginUtils implements SvcLogicJavaPlugin {
 
 		String fileName = parameters.get("filename");
 
-		PrintStream pstr = null;
 
-		try {
-			pstr = new PrintStream(new FileOutputStream(new File(fileName), true));
+		try (FileOutputStream fstr = new FileOutputStream(new File(fileName));
+			 PrintStream pstr = new PrintStream(fstr, true);)
+		{
+			pstr.println("#######################################");
+			for (String attr : ctx.getAttributeKeySet()) {
+				pstr.println(attr + " = " + ctx.getAttribute(attr));
+			}
 		} catch (Exception e) {
-			throw new SvcLogicException("Cannot open file " + fileName, e);
+			throw new SvcLogicException("Cannot write context to file " + fileName, e);
 		}
-	        pstr.println("#######################################");
-		for (String attr : ctx.getAttributeKeySet()) {
-			pstr.println(attr + " = " + ctx.getAttribute(attr));
-		}
-		pstr.flush();
-		pstr.close();
+
+
 	}
 
 	 /**
