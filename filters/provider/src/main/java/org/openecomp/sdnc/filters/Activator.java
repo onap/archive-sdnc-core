@@ -21,11 +21,6 @@
 
 package org.openecomp.sdnc.filters;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.net.URL;
-import java.util.Properties;
-
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
