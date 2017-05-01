@@ -69,9 +69,9 @@ public abstract class AbstractResourceManagerFactory {
 				ds = CachedDataSourceFactory.createDataSource(config);
 				return ds;
 			} finally {
-				synchronized(activeTasks){
+				synchronized(activeTasks) {
 					activeTasks.remove(this);
-					if(activeTasks.isEmpty()){
+					if (activeTasks.isEmpty()) {
 						final Runnable closure = new Runnable() {
 
 							public void run() {
@@ -79,20 +79,23 @@ public abstract class AbstractResourceManagerFactory {
 									Thread.sleep(300);
 								} catch (Exception e) {
 								}
-								synchronized(activeTasks){
+								synchronized(activeTasks) {
 									activeTasks.notifyAll();
 								}
 							}
 						};
-						if(LOGGER.isDebugEnabled())
-							LOGGER.debug("Completed CachedDataSource.Call and notifyAll from "+ds.getDbConnectionName());
+						if (LOGGER.isDebugEnabled()) {
+							LOGGER.debug("Completed CachedDataSource.Call and notifyAll from " + ds.getDbConnectionName());
+						}
 						Thread worker = new Thread(closure);
 						worker.setDaemon(true);
 						worker.start();
 					} else {
-						if(LOGGER.isDebugEnabled())
-							if(ds != null)
-							LOGGER.debug("Completed CachedDataSource.Call from "+ds.getDbConnectionName());
+						if (LOGGER.isDebugEnabled()) {
+							if (ds != null) {
+								LOGGER.debug("Completed CachedDataSource.Call from " + ds.getDbConnectionName());
+							}
+						}
 					}
 				}
 			}
