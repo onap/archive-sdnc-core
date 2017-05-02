@@ -10,7 +10,7 @@
     <feature name='sdnc-dblib' description="sdnc-dblib" version='${project.version}'>
         <!-- Most applications will have a dependency on the ODL MD-SAL Broker -->
         <feature version="${odl.mdsal.version}">odl-mdsal-broker</feature>
-        <bundle>mvn:org.openecomp.sdnc.core/dblib-common/${project.version}</bundle>
+        <bundle>mvn:org.apache.tomcat/tomcat-jdbc/${tomcat-jdbc.version}</bundle>
         <bundle>mvn:org.openecomp.sdnc.core/dblib-provider/${project.version}</bundle>
         <bundle>mvn:mysql/mysql-connector-java/${mysql.connector.version}</bundle>
     </feature>

@@ -150,6 +150,7 @@
 		<mysql.connector.version>5.1.39</mysql.connector.version>
 		<h2database.version>1.4.186</h2database.version>
 
+		<tomcat-jdbc.version>8.5.14</tomcat-jdbc.version>
 	</properties>
 
 	<modelVersion>4.0.0</modelVersion>
