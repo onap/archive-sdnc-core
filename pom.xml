@@ -39,7 +39,7 @@
 	<distributionManagement>
 		<site>
 			<id>ecomp-site</id>
-			<url>dav:https://${openecomp.nexus.host}/content/sites/site/org/onap/sdnc/${project.artifactId}/${project.version}</url>
+			<url>dav:https://${openecomp.nexus.host}/content/sites/site/org/onap/sdnc/core/${project.artifactId}/${project.version}</url>
 		</site>
 	</distributionManagement>
 
