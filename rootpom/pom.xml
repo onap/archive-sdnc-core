@@ -506,11 +506,6 @@
 						<artifactId>maven-site-plugin</artifactId>
 						<version>3.6</version>
 						<dependencies>
-							<dependency><!-- add support for ssh/scp -->
-								<groupId>org.apache.maven.wagon</groupId>
-								<artifactId>wagon-ssh</artifactId>
-								<version>1.0</version>
-							</dependency>
 							<dependency>
 								<groupId>org.apache.maven.wagon</groupId>
 								<artifactId>wagon-webdav-jackrabbit</artifactId>
