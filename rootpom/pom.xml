@@ -163,7 +163,7 @@
 		<dependencyManagement>
 			<dependencies>
 				<dependency>
-					<groupId>org.opendaylight.controller</groupId>
+					<groupId>org.opendaylight.odlparent</groupId>
 					<artifactId>opendaylight-karaf-empty</artifactId>
 					<version>${odl.karaf.empty.distro.version}</version>
 					<type>zip</type>
