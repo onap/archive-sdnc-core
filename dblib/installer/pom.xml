@@ -40,6 +40,11 @@
         </dependency>
 
 
+	<dependency>
+	    <groupId>org.apache.tomcat</groupId>
+	    <artifactId>tomcat-jdbc</artifactId>
+	    <version>${tomcat-jdbc.version}</version>
+	</dependency>
     </dependencies>
 
     <build>
@@ -98,7 +103,7 @@
                             <useRepositoryLayout>true</useRepositoryLayout>
                             <addParentPoms>false</addParentPoms>
                             <copyPom>false</copyPom>
-                            <includeGroupIds>org.openecomp.sdnc</includeGroupIds>
+                            <includeGroupIds>org.openecomp.sdnc,org.apache.tomcat</includeGroupIds>
                             <excludeArtifactIds>sli-common,sli-provider</excludeArtifactIds>
                             <scope>provided</scope>
                         </configuration>

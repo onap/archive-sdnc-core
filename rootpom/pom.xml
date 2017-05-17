@@ -226,11 +226,6 @@
 						<excludePackageNames>org.opendaylight.*</excludePackageNames>
 						<additionalDependencies>
 							<additionalDependency>
-								<groupId>org.opendaylight.odlparent</groupId>
-								<artifactId>odlparent</artifactId>
-								<version>1.7.1-Boron-SR1</version>
-							</additionalDependency>
-							<additionalDependency>
 								<groupId>org.slf4j</groupId>
 								<artifactId>slf4j-api</artifactId>
 								<version>${slf4j.version}</version>
