@@ -70,7 +70,7 @@ public class SvcLogicActivator implements BundleActivator {
 			put("switch", new SwitchNodeExecutor());
 			put("update", new UpdateNodeExecutor());
             put("break", new BreakNodeExecutor());
-
+            put("while", new WhileNodeExecutor());
 		}
 	};
 

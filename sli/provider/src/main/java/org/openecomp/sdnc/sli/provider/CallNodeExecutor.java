@@ -78,16 +78,7 @@ public class CallNodeExecutor extends SvcLogicNodeExecutor {
 		{
 			rpc  = SvcLogicExpressionResolver.evaluate(rpcExpr, node, ctx);
 		}
-		
-		if ((rpc == null) || (rpc.length() == 0))
-		{
-			if (myGraph != null)
-			{
-				rpc = myGraph.getRpc();
-				LOG.debug("myGraph.getRpc() returned "+rpc);
-			}
-		}
-		
+
 		String mode = null;
 		
 		moduleExpr = node.getAttribute("mode");
@@ -122,8 +113,8 @@ public class CallNodeExecutor extends SvcLogicNodeExecutor {
         if (store != null) {
             SvcLogicGraph calledGraph = store.fetch(module, rpc, version, mode);
             if (calledGraph != null) {
-                LOG.debug("Parent " + parentGraph + " is calling child " + calledGraph.toString());
                 svc.execute(calledGraph, ctx);
+                LOG.debug("Parent " + parentGraph + " is calling child " + calledGraph.toString());
                 ctx.setAttribute("currentGraph", calledGraph.toString());
                 outValue = ctx.getStatus();
             } else {

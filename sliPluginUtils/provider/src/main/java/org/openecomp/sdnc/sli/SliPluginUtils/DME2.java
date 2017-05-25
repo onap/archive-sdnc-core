@@ -88,6 +88,7 @@ public class DME2 implements SvcLogicJavaPlugin {
         if (this.partner != null) {
             sb.append("&dme2.partner=" + this.partner);
         }
+        sb.append("&dme2.allowhttpcode=true");
         return (sb.toString());
     }
 

@@ -239,7 +239,7 @@ public class SvcLogicParser {
 
         if (curNode != null) {
         try {
-            if ("block".equalsIgnoreCase(curNode.getNodeType()) || "for".equalsIgnoreCase(curNode.getNodeType())) {
+            if ("block".equalsIgnoreCase(curNode.getNodeType()) || "for".equalsIgnoreCase(curNode.getNodeType()) || "while".equalsIgnoreCase(curNode.getNodeType())) {
             curNode.addOutcome("" + (curNode.getNumOutcomes() + 1), thisNode);
             } else {
             if (outcomeValue == null) {
