@@ -26,9 +26,6 @@ import org.openecomp.sdnc.sli.SvcLogicException;
 import org.openecomp.sdnc.sli.SvcLogicExpression;
 import org.openecomp.sdnc.sli.SvcLogicNode;
 import org.openecomp.sdnc.sli.SvcLogicResource;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -113,22 +110,5 @@ public class ReserveNodeExecutor extends SvcLogicNodeExecutor {
 		}
 		return (nextNode);
 	}
-
-    protected SvcLogicResource getSvcLogicResource(String plugin) {
-        BundleContext bctx = FrameworkUtil.getBundle(this.getClass())
-                .getBundleContext();
-
-        ServiceReference sref = bctx.getServiceReference(plugin);
-        if (sref != null) {
-            SvcLogicResource resourcePlugin = (SvcLogicResource) bctx
-                    .getService(sref);
-            return resourcePlugin;
-        }
-        else {
-            LOG.warn("Could not find service reference object for plugin " + plugin);
-            return null;
-        }
-    }
-
 
 }

@@ -21,16 +21,10 @@
 
 package org.openecomp.sdnc.sli.provider;
 
-import java.util.HashMap;
 import java.util.Properties;
 
 import org.opendaylight.controller.md.sal.dom.api.DOMDataBroker;
-import org.openecomp.sdnc.sli.SvcLogicContext;
 import org.openecomp.sdnc.sli.SvcLogicException;
-import org.openecomp.sdnc.sli.SvcLogicGraph;
-
-
-
 
 public interface SvcLogicService {
 	

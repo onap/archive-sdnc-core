@@ -21,9 +21,6 @@
 
 package org.openecomp.sdnc.sli.provider;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-
 import org.openecomp.sdnc.sli.SvcLogicContext;
 import org.openecomp.sdnc.sli.SvcLogicException;
 import org.openecomp.sdnc.sli.SvcLogicNode;

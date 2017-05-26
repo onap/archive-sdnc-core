@@ -21,7 +21,6 @@
 
 package org.openecomp.sdnc.sli.provider;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;

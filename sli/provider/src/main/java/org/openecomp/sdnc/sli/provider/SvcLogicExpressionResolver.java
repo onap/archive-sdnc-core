@@ -25,15 +25,15 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.openecomp.sdnc.sli.SvcLogicAtom;
+import org.openecomp.sdnc.sli.SvcLogicAtom.AtomType;
 import org.openecomp.sdnc.sli.SvcLogicBinaryExpression;
+import org.openecomp.sdnc.sli.SvcLogicBinaryExpression.OperatorType;
 import org.openecomp.sdnc.sli.SvcLogicContext;
 import org.openecomp.sdnc.sli.SvcLogicException;
 import org.openecomp.sdnc.sli.SvcLogicExpression;
 import org.openecomp.sdnc.sli.SvcLogicFunctionCall;
 import org.openecomp.sdnc.sli.SvcLogicNode;
 import org.openecomp.sdnc.sli.SvcLogicVariableTerm;
-import org.openecomp.sdnc.sli.SvcLogicAtom.AtomType;
-import org.openecomp.sdnc.sli.SvcLogicBinaryExpression.OperatorType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

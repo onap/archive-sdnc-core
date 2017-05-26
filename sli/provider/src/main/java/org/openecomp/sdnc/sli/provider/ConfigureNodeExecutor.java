@@ -50,8 +50,7 @@ public class ConfigureNodeExecutor extends SvcLogicNodeExecutor {
 					+ adaptorName);
 		}
 
-		SvcLogicAdaptor adaptor = SvcLogicAdaptorFactory
-				.getInstance(adaptorName);
+		SvcLogicAdaptor adaptor = getAdaptor(adaptorName);
 
 		if (adaptor != null) {
 			String activate = SvcLogicExpressionResolver.evaluate(

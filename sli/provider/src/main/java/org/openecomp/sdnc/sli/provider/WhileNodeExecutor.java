@@ -21,14 +21,13 @@
 
 package org.openecomp.sdnc.sli.provider;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.openecomp.sdnc.sli.BreakNodeException;
 import org.openecomp.sdnc.sli.SvcLogicContext;
 import org.openecomp.sdnc.sli.SvcLogicException;
 import org.openecomp.sdnc.sli.SvcLogicExpression;
 import org.openecomp.sdnc.sli.SvcLogicNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class WhileNodeExecutor extends SvcLogicNodeExecutor {
 

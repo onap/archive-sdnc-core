@@ -28,16 +28,11 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.openecomp.sdnc.sli.SvcLogicAdaptor;
 import org.openecomp.sdnc.sli.SvcLogicContext;
 import org.openecomp.sdnc.sli.SvcLogicException;
 import org.openecomp.sdnc.sli.SvcLogicExpression;
 import org.openecomp.sdnc.sli.SvcLogicJavaPlugin;
 import org.openecomp.sdnc.sli.SvcLogicNode;
-import org.openecomp.sdnc.sli.SvcLogicResource;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -145,21 +140,6 @@ public class ExecuteNodeExecutor extends SvcLogicNodeExecutor {
 		return (nextNode);
 	}
 
-	protected SvcLogicJavaPlugin getSvcLogicJavaPlugin(String pluginName){
-	       BundleContext bctx = FrameworkUtil.getBundle(this.getClass())
-	                .getBundleContext();
-
-	        ServiceReference sref = bctx.getServiceReference(pluginName);
-
-	        if (sref == null) {
-	            LOG.warn("Could not find service reference object for plugin " + pluginName);
-	            return null;
-	        } else {
-	            SvcLogicJavaPlugin plugin  = (SvcLogicJavaPlugin) bctx
-	                    .getService(sref);
-	            return plugin;
-	        }
-	}
 	protected String evaluate(SvcLogicExpression expr, SvcLogicNode node, SvcLogicContext ctx) throws SvcLogicException {
         return SvcLogicExpressionResolver.evaluate(node.getAttribute("method"), node, ctx);
     }

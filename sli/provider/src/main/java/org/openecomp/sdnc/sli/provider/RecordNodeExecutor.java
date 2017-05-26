@@ -31,9 +31,6 @@ import org.openecomp.sdnc.sli.SvcLogicException;
 import org.openecomp.sdnc.sli.SvcLogicExpression;
 import org.openecomp.sdnc.sli.SvcLogicNode;
 import org.openecomp.sdnc.sli.SvcLogicRecorder;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -79,7 +76,7 @@ public class RecordNodeExecutor extends SvcLogicNodeExecutor {
 		}
 
 
-			SvcLogicRecorder recorder = getSvcLogicResource(plugin);
+			SvcLogicRecorder recorder = getSvcLogicRecorder(plugin);
 
 			if (recorder != null) {
 
@@ -115,20 +112,7 @@ public class RecordNodeExecutor extends SvcLogicNodeExecutor {
 		return (nextNode);
 	}
 
-    protected SvcLogicRecorder getSvcLogicResource(String plugin) {
-        BundleContext bctx = FrameworkUtil.getBundle(this.getClass())
-                .getBundleContext();
 
-        ServiceReference sref = bctx.getServiceReference(plugin);
-        if (sref != null) {
-            SvcLogicRecorder resourcePlugin = (SvcLogicRecorder) bctx
-                    .getService(sref);
-            return resourcePlugin;
-        }
-        else {
-            return null;
-        }
-    }
 
 
 

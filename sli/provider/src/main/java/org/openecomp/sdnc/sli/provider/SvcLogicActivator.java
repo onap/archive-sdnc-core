@@ -23,7 +23,6 @@ package org.openecomp.sdnc.sli.provider;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.LinkedList;
@@ -70,7 +69,7 @@ public class SvcLogicActivator implements BundleActivator {
 			put("switch", new SwitchNodeExecutor());
 			put("update", new UpdateNodeExecutor());
             put("break", new BreakNodeExecutor());
-            put("while", new WhileNodeExecutor());
+
 		}
 	};
 
