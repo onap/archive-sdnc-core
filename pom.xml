@@ -10,14 +10,12 @@
 	<url>https://wiki.openecomp.org</url>
 	<description>The SDN-C core components contains the SLI, dblib and root pom</description>
 
-<!--
 	<parent>
 		<groupId>org.openecomp.sdnc.core</groupId>
 		<artifactId>root</artifactId>
-		<version>1.1.0</version>
+		<version>1.1.2</version>
 		<relativePath>rootpom/pom.xml</relativePath>
 	</parent>
--->
 
 	<issueManagement>
 		<system>JIRA</system>
@@ -170,7 +168,6 @@
 		</plugins>
 
 	</build>
-<!--
 	<modules>
 		<module>dblib</module>
 		<module>sli</module>
@@ -178,11 +175,10 @@
 		<module>sliPluginUtils</module>
 		<module>sliapi</module>
 	</modules>
--->
 	<organization>
 		<name>OpenECOMP</name>
 	</organization>
-	<version>1.1.1-SNAPSHOT</version>
+	<version>1.1.2-SNAPSHOT</version>
 
 
 </project>

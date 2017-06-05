@@ -3,7 +3,7 @@
     <parent>
         <groupId>org.openecomp.sdnc.core</groupId>
         <artifactId>sdnc-core</artifactId>
-        <version>1.1.1-SNAPSHOT</version>
+        <version>1.1.2-SNAPSHOT</version>
     </parent>
 
 
@@ -16,7 +16,7 @@
     <name>DBLIB Adaptor</name>
     <description>The DBLIB adaptor allows service logic to access persistent data in a local sql database</description>
 
-    <version>1.1.1-SNAPSHOT</version>
+    <version>1.1.2-SNAPSHOT</version>
 
     <build>
     <plugins>

@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>sli</artifactId>
 		<groupId>org.openecomp.sdnc.core</groupId>
-		<version>1.1.1-SNAPSHOT</version>
+		<version>1.1.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>sli-installer</artifactId>
 	<name>SLI - Karaf  Installer</name>
