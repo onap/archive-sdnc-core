@@ -169,11 +169,13 @@
 
 	</build>
 	<modules>
+	<!--
 		<module>dblib</module>
 		<module>sli</module>
 		<module>filters</module>
 		<module>sliPluginUtils</module>
 		<module>sliapi</module>
+	-->
 	</modules>
 	<organization>
 		<name>OpenECOMP</name>
