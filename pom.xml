@@ -13,7 +13,7 @@
 	<parent>
 		<groupId>org.openecomp.sdnc.core</groupId>
 		<artifactId>root</artifactId>
-		<version>1.1.2</version>
+		<version>1.1.0</version>
 		<relativePath>rootpom/pom.xml</relativePath>
 	</parent>
 
@@ -169,13 +169,11 @@
 
 	</build>
 	<modules>
-	<!--
 		<module>dblib</module>
 		<module>sli</module>
 		<module>filters</module>
 		<module>sliPluginUtils</module>
 		<module>sliapi</module>
-	-->
 	</modules>
 	<organization>
 		<name>OpenECOMP</name>
