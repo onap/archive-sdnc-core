@@ -68,11 +68,11 @@
 
 
 		<!--  SDN-C component versions  -->
-		<sdnc.core.version>(1.2.0,1.2.999)</sdnc.core.version>
-		<sdnc.adaptors.version>(1.2.0,1.2.999)</sdnc.adaptors.version>
-		<sdnc.northbound.version>(1.2.0,1.2.999)</sdnc.northbound.version>
-		<sdnc.oam.version>(1.2.0,1.2.999)</sdnc.oam.version>
-		<sdnc.plugins.version>(1.2.0,1.2.999)</sdnc.plugins.version>
+		<sdnc.core.version>(1.1.999,1.2.999)</sdnc.core.version>
+		<sdnc.adaptors.version>(1.1.999,1.2.999)</sdnc.adaptors.version>
+		<sdnc.northbound.version>(1.1.999,1.2.999)</sdnc.northbound.version>
+		<sdnc.oam.version>(1.1.999,1.2.999)</sdnc.oam.version>
+		<sdnc.plugins.version>(1.1.999,1.2.999)</sdnc.plugins.version>
 		<sdnctl.sli.version>${sdnc.core.version}</sdnctl.sli.version>
 		<sdnctl.aai.service.version>${sdnc.adaptors.version}</sdnctl.aai.service.version>
 		<sdnctl.dblib.version>${sdnc.core.version}</sdnctl.dblib.version>
