@@ -284,17 +284,17 @@ public class sliapiProvider implements AutoCloseable, SLIAPIService{
 					null, modeStr, parms, domDataBroker);
 
 			StringBuilder sb = new StringBuilder("{");
-			
+
 			for (Object key : respProps.keySet()) {
 				String keyValue = (String) key;
 				if (keyValue != null && !"".equals(keyValue) && !keyValue.contains("input.sli-parameter")) {
 					sb.append("\"").append(keyValue).append("\": \"").append(respProps.getProperty(keyValue)).append("\",");
 				}
 			}
-			
+
 			sb.setLength(sb.length() - 1);
 			sb.append("}");
-			
+
 			respBuilder.setResponseCode(respProps.getProperty("error-code", "0"));
 			respBuilder.setResponseMessage(respProps.getProperty("error-message", ""));// TODO change response-text to response-message to match other BVC APIs
 			respBuilder.setAckFinalIndicator(respProps.getProperty("ack-final", "Y"));
