@@ -5,8 +5,8 @@
 	<modelVersion>4.0.0</modelVersion>
 	<packaging>pom</packaging>
 	<groupId>org.openecomp.sdnc.core</groupId>
-	<artifactId>root</artifactId>
-	<version>1.1.1</version>
+	<artifactId>rootpom</artifactId>
+	<version>1.1.0</version>
 
 
 		<name>SDNC Root</name>
@@ -734,6 +734,7 @@
 			<name>OpenECOMP</name>
 		</organization>
 	<modules>
+		<module>root</module>
 		<module>boron-sr1</module>
 		<module>boron-sr3</module>
 	</modules>

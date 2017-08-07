@@ -8,15 +8,16 @@
 		<version>1.7.1-Boron-SR1</version>
 	</parent>
 
+
 	<modelVersion>4.0.0</modelVersion>
 	<packaging>pom</packaging>
 	<groupId>org.openecomp.sdnc.core</groupId>
-	<artifactId>root-boron-sr1</artifactId>
+	<artifactId>root</artifactId>
 	<version>1.1.0</version>
-		<name>SDNC Root - Boron SR1</name>
-		<url>http://wiki.onap.org</url>
-		<description>Root POM to be used for all SDNC projects</description>
 
+	<name>SDNC Root - original </name>
+	<url>http://wiki.onap.org</url>
+	<description>Original root POM to be used for all SDNC projects - should no longer be used.  ODL release specific POMs is preferred</description>
 
 	<properties>
 
