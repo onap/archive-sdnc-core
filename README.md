@@ -1,7 +1,5 @@
-This source repository contains the code for the core SDN Controller components.
-To compile this code:
+The seed code that was formerly in the sdnc/core repository has been
+refactored for ONAP Amsterdam and moved to the CCSDK project, to
+the repository sli/core.
 
-1. Make sure your local Maven settings file ($HOME/.m2/settings.xml) contains references to the OpenECOMP repositories and OpenDaylight repositories.  See example-settings.xml for an example.
-
-2. To compile, run "mvn clean install".
 
