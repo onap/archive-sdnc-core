@@ -124,7 +124,7 @@
 	</dependencyManagement>
 
 
-	<name>SDNC Root</name>
+	<name>sdnc-core</name>
 	<url>http://wiki.onap.org</url>
 	<description>Root POM to be used for all SDNC projects</description>
 

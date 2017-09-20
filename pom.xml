@@ -7,7 +7,7 @@
 	<groupId>org.openecomp.sdnc.core</groupId>
 	<artifactId>sdnc-core</artifactId>
 
-	<name>SDN-C Core Components</name>
+	<name>sdnc-core</name>
 	<url>https://wiki.openecomp.org</url>
 	<description>The SDN-C core components contains the SLI, dblib and root pom</description>
 
