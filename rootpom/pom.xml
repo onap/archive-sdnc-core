@@ -8,7 +8,7 @@
     <artifactId>sdnc-core-rootpom</artifactId>
     <version>1.2.0-SNAPSHOT</version>
 
-    <name>SDN-C Core Components - rootpom</name>
+    <name>sdnc-core</name>
     <url>https://wiki.openecomp.org</url>
     <description>The SDN-C core components contains the SLI, dblib and root pom</description>
 
